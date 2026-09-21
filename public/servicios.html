@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INARA | Servicios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <div class="bg-dynamic-alt text-center py-2 fw-bold text-accent" style="font-size: 0.85rem; border-bottom: 1px solid var(--border-color);">
+        35% de descuento en catering por tu primera reserva online
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dynamic py-3 sticky-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            
+            <div class="d-flex align-items-center gap-2 d-lg-none">
+                <button class="theme-toggle-btn">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="navbar-toggler border-0 shadow-none p-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                    <i class="fa-solid fa-bars text-accent fs-3"></i>
+                </button>
+            </div>
+            
+            <a class="navbar-brand d-lg-none mx-auto" href="index.html">
+                <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
+            </a>
+            
+            <div class="d-lg-none" style="width: 45px;"></div>
+
+            <div class="collapse navbar-collapse justify-content-between align-items-center w-100" id="nav">
+                <ul class="navbar-nav flex-row gap-4 align-items-center d-none d-lg-flex mb-0" style="flex: 1; justify-content: flex-end; padding-right: 2.5rem;">
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic active" href="servicios.html">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="galeria.html">Galería</a></li>
+                </ul>
+
+                <a class="navbar-brand d-none d-lg-block mx-0 text-center" href="index.html">
+                    <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
+                </a>
+
+                <ul class="navbar-nav flex-row gap-4 align-items-center d-none d-lg-flex mb-0" style="flex: 1; justify-content: flex-start; padding-left: 2.5rem;">
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item">
+                        <button class="theme-toggle-btn ms-2">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a href="contacto.html" class="btn-reserva">RESERVAR CITA</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav d-lg-none text-center w-100 py-3 gap-2">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="servicios.html">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="galeria.html">Galería</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item mt-2"><a href="contacto.html" class="btn-reserva">RESERVAR CITA</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-5 my-4">
+        <div class="container text-center">
+            <span class="badge-dynamic">EXPERIENCIA INARA</span>
+            <h1 class="display-4 fw-bold mb-4">Nuestros Servicios</h1>
+            <p class="mx-auto mb-5" style="max-width: 600px;">Diseñamos experiencias premium a medida. Cuidamos cada detalle arquitectónico, gastronómico y organizativo para que tu única tarea sea celebrar.</p>
+
+            <div class="row g-4 text-start">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/matrimonio.jpg" class="card-img-top" alt="Bodas" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">01</span> Bodas de Ensueño</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Celebraciones mágicas con un toque de sofisticación única y banquetes de alta etiqueta.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalBoda" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/quinceañera.jpg" class="card-img-top" alt="Quinceañeros" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">02</span> Quinceañeros</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Fiestas espectaculares y llenas de juventud, luces deslumbrantes y montajes temáticos.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuince" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/corporativo.jpg" class="card-img-top" alt="Corporativos" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">03</span> Corporativos</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Lanzamientos, cenas de gala y conferencias empresariales con el más alto estándar.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalCorp" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/tematica.jpg" class="card-img-top" alt="Temáticas" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">04</span> Fiestas Temáticas</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Inmersión estética absoluta donde cada elemento responde a una fantasía exclusiva.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalTema" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/aniversario.jpg" class="card-img-top" alt="Aniversarios" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">05</span> Aniversarios</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Renovamos votos y premiamos los años de trayectoria, amor y éxitos compartidos.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAniv" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/bautizo.jpg" class="card-img-top" alt="Bautizos" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">06</span> Bautizos</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Celebraciones tiernas y llenas de luz para darle la bienvenida al nuevo integrante de la familia.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalBautizo" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/despedida.jpg" class="card-img-top" alt="Despedidas" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">07</span> Despedidas</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Despedidas de soltera elegantes y divertidas con coctelería premium y decoración chic.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDespedida" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-dynamic h-100">
+                        <img src="./assets/img/comunion.jpg" class="card-img-top" alt="Comunión" style="height: 200px; object-fit: cover;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="mb-3"><span class="text-accent me-2">08</span> Primera Comunión</h5>
+                            <p class="mb-4" style="font-size: 0.9rem;">Mesas de postres angelicales, arreglos florales delicados y un ambiente de paz total.</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalComunion" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section text-center py-5 bg-dynamic-alt">
+        <div class="container py-4">
+            <h2 class="display-5 fw-bold mb-3">¿Tienes una visión o un proyecto en mente?</h2>
+            <p class="mx-auto mb-5 text-secondary" style="max-width: 650px; font-size: 1.05rem;">Permítenos ayudarte a planificar y realizar el evento que siempre has imaginado con el refinamiento y la elegancia que solo INARA puede ofrecer.</p>
+            <a href="contacto.html" class="btn-reserva px-5 py-3 fs-5">COTIZA TU EVENTO</a>
+        </div>
+    </section>
+
+    <footer class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo mb-3">
+                    <p class="pe-lg-5" style="font-size: 0.9rem;">La casa de eventos de lujo que transforma tus sueños en celebraciones inolvidables. Diseño, elegancia y atención al detalle.</p>
+                    <p class="mt-4 mb-0" style="font-size: 0.85rem;">&copy; 2026 INARA Casa de Eventos. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h6 class="text-accent fw-bold mb-4">Navegación</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><a href="index.html" class="text-decoration-none" style="color: inherit;">Inicio</a></li>
+                        <li class="mb-3"><a href="servicios.html" class="text-decoration-none" style="color: inherit;">Servicios</a></li>
+                        <li class="mb-3"><a href="galeria.html" class="text-decoration-none" style="color: inherit;">Galería</a></li>
+                        <li class="mb-3"><a href="sobre-nosotros.html" class="text-decoration-none" style="color: inherit;">Sobre Nosotros</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <h6 class="text-accent fw-bold mb-4">Contacto</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">Villa María del Triunfo, Lima</li>
+                        <li class="mb-3">eventos@inara.com</li>
+                        <li class="mb-3">+51 987 654 321</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h6 class="text-accent fw-bold mb-4">Síguenos</h6>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="social-btn"><i class="fa-solid fa-envelope"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/inaraeventos.pe?igsi=ZGJrb2tyMndma2x2" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="modalBoda" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Bodas de Ensueño</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/matrimonio.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Boda">
+                    <p>Diseñamos bodas que reflejan la personalidad de los novios. Nos encargamos de toda la dirección de arte, desde el altar hasta la pista de baile, para que tu única preocupación sea disfrutar del día más importante de tu vida.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Catering de Autor:</strong> Menús personalizados de 3 tiempos y estaciones de bocaditos premium.</li>
+                        <li class="mb-2"><strong>Ambientación:</strong> Arreglos florales de temporada, toldos arquitectónicos y mesas imperiales.</li>
+                        <li class="mb-2"><strong>Coordinación:</strong> Wedding planner incluido para el protocolo y desarrollo del evento.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=boda" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalQuince" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Quinceañeros</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/quinceañera.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Quinceañero">
+                    <p>Fiestas que marcan tendencia. Combinamos la tradición de los 15 años con elementos modernos, tecnología LED y temáticas espectaculares para deslumbrar a todos tus invitados.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Buffet Juvenil y Tradicional:</strong> Opciones gastronómicas variadas para adultos y jóvenes.</li>
+                        <li class="mb-2"><strong>Efectos Especiales:</strong> Pistas de baile iluminadas, chispas frías y humo bajo para el vals.</li>
+                        <li class="mb-2"><strong>Zonas Fotográficas:</strong> Backdrops y cabinas 360° personalizadas.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=quince" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalCorp" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Eventos Corporativos</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/corporativo.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Corporativo">
+                    <p>Transmitimos el prestigio de tu marca en cada evento. Especialistas en cenas de gala, aniversarios institucionales y fiestas de fin de año con estricto rigor y etiqueta profesional.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Branding Inmersivo:</strong> Decoración con los colores e identidad visual de la empresa.</li>
+                        <li class="mb-2"><strong>Equipamiento Audiovisual:</strong> Pantallas gigantes, sonido profesional y micrófonos.</li>
+                        <li class="mb-2"><strong>Coffee Breaks y Cenas Formales:</strong> Adaptados a la dinámica y tiempos del evento.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=corp" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTema" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Fiestas Temáticas</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/tematica.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Temática">
+                    <p>Desde una noche en Hollywood hasta un festival neón. Construimos escenografías completas que transportan a tus invitados a mundos completamente nuevos.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Dirección de Arte Total:</strong> Ambientación envolvente que abarca techo, paredes y piso.</li>
+                        <li class="mb-2"><strong>Menú Conceptual:</strong> Gastronomía y coctelería diseñada acorde al tema de la fiesta.</li>
+                        <li class="mb-2"><strong>Mobiliario Específico:</strong> Salas lounge, barras iluminadas y utilería exclusiva.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=tema" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAniv" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Aniversarios</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/aniversario.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Aniversario">
+                    <p>Celebra Bodas de Plata, Oro o aniversarios especiales con la sobriedad y la emotividad que merecen los grandes hitos de la vida.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Estética Elegante:</strong> Tonos metálicos, dorados o plateados integrados con sutileza.</li>
+                        <li class="mb-2"><strong>Mesa de Honor Destacada:</strong> Diseño exclusivo para los homenajeados con arreglos florales premium.</li>
+                        <li class="mb-2"><strong>Música y Espectáculo:</strong> Opciones de música en vivo, cuartetos de cuerda o bandas de época.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=aniv" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalBautizo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Bautizos</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/bautizo.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Bautizo">
+                    <p>Diseñamos recepciones íntimas y cálidas para celebrar los primeros sacramentos, priorizando la elegancia en tonos pasteles y espacios acogedores.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Mesas de Postres Angelicales:</strong> Dulces temáticos finamente decorados.</li>
+                        <li class="mb-2"><strong>Brunch o Almuerzos Ligeros:</strong> Opciones gastronómicas ideales para horarios de día.</li>
+                        <li class="mb-2"><strong>Decoración Delicada:</strong> Uso de telas vaporosas, globos en tonos mate y papelería personalizada.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=bautizo" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalDespedida" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Despedidas de Soltera</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/despedida.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Despedida">
+                    <p>Eventos chic, femeninos y sumamente divertidos. Desde un brunch elegante hasta una noche de cócteles vibrante, nos adaptamos a la personalidad de la novia.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Barras Móviles:</strong> Coctelería de autor ilimitada con bartenders profesionales.</li>
+                        <li class="mb-2"><strong>Mobiliario Lounge y Pícnic:</strong> Ambientes relajados y sumamente 'Instagrameables'.</li>
+                        <li class="mb-2"><strong>Estaciones de Bocaditos:</strong> Tablas de quesos, charcutería y piqueos gourmet.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=despedida" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalComunion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-dynamic border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h3 class="modal-title fw-bold text-accent">Primera Comunión</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="./assets/img/comunion.jpg" class="img-fluid rounded mb-4 w-100" style="height: 300px; object-fit: cover;" alt="Comunión">
+                    <p>Celebra este paso importante con un banquete elegante y una ambientación pura y sofisticada, creando el balance perfecto entre diversión infantil y etiqueta familiar.</p>
+                    <ul class="mt-3">
+                        <li class="mb-2"><strong>Decoración Minimalista y Pura:</strong> Énfasis en blancos, crudos y detalles dorados sutiles.</li>
+                        <li class="mb-2"><strong>Zonas Mixtas:</strong> Áreas formales para adultos y espacios de entretenimiento para los niños.</li>
+                        <li class="mb-2"><strong>Recuerdos y Papelería:</strong> Diseño de invitaciones y recordatorios a juego con la decoración.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <a href="contacto.html?evento=comunion" class="btn-main w-100 text-center">COTIZAR ESTE EVENTO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
