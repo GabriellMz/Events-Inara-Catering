@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INARA | Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <div class="bg-dynamic-alt text-center py-2 fw-bold text-accent" style="font-size: 0.85rem; border-bottom: 1px solid var(--border-color);">
+        35% de descuento en catering por tu primera reserva online
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dynamic py-3 sticky-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            
+            <div class="d-flex align-items-center gap-2 d-lg-none">
+                <button class="theme-toggle-btn">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="navbar-toggler border-0 shadow-none p-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                    <i class="fa-solid fa-bars text-accent fs-3"></i>
+                </button>
+            </div>
+            
+            <a class="navbar-brand d-lg-none mx-auto" href="index.html">
+                <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
+            </a>
+            
+            <div class="d-lg-none" style="width: 45px;"></div>
+
+            <div class="collapse navbar-collapse justify-content-between align-items-center w-100" id="nav">
+                <ul class="navbar-nav flex-row gap-4 align-items-center d-none d-lg-flex mb-0" style="flex: 1; justify-content: flex-end; padding-right: 2.5rem;">
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic active" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="servicios.html">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="galeria.html">Galería</a></li>
+                </ul>
+
+                <a class="navbar-brand d-none d-lg-block mx-0 text-center" href="index.html">
+                    <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
+                </a>
+
+                <ul class="navbar-nav flex-row gap-4 align-items-center d-none d-lg-flex mb-0" style="flex: 1; justify-content: flex-start; padding-left: 2.5rem;">
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-dynamic" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item">
+                        <button class="theme-toggle-btn ms-2">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a href="contacto.html" class="btn-reserva">RESERVAR CITA</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav d-lg-none text-center w-100 py-3 gap-2">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="galeria.html">Galería</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item mt-2"><a href="contacto.html" class="btn-reserva">RESERVAR CITA</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2500">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active" style="height: 85vh; background-image: url('./assets/img/banner.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div class="hero-overlay"></div>
+                    <div class="carousel-caption d-flex flex-column justify-content-center align-items-center h-100 pb-0" style="z-index: 2;">
+                        <span class="badge-dynamic bg-transparent text-white border-white mb-3">PLANIFICACIÓN & ALTA GASTRONOMÍA</span>
+                        <h1 class="display-3 fw-bold text-uppercase text-white text-center" style="letter-spacing: 2px;">EL DETALLE<br><span class="text-accent fst-italic">HACE</span> LA<br>DIFERENCIA</h1>
+                        <p class="text-white-50 mt-3 mx-auto text-center" style="max-width: 650px; font-size: 1.15rem;">Transformamos espacios ordinarios en escenarios legendarios. Diseños a medida, montajes vanguardistas y un banquete sin precedentes.</p>
+                        <div class="mt-4 d-flex gap-3">
+                            <a href="contacto.html" class="btn-reserva px-4 py-3 fs-6">Agenda tu Evento Aquí</a>
+                            <a href="servicios.html" class="btn btn-outline-light rounded-pill px-4 py-3 fs-6 fw-semibold">Explorar Salones</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" style="height: 85vh; background-image: url('./assets/img/banner2.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div class="hero-overlay"></div>
+                    <div class="carousel-caption d-flex flex-column justify-content-center align-items-center h-100 pb-0" style="z-index: 2;">
+                        <span class="badge-dynamic bg-transparent text-white border-white mb-3">EXPERIENCIAS EXCLUSIVAS</span>
+                        <h1 class="display-3 fw-bold text-uppercase text-white text-center" style="letter-spacing: 2px;">CREAMOS<br><span class="text-accent fst-italic">MOMENTOS</span><br>INOLVIDABLES</h1>
+                        <p class="text-white-50 mt-3 mx-auto text-center" style="max-width: 650px; font-size: 1.15rem;">Tu celebración soñada en manos expertas. Cuidamos cada segundo de tu velada con la distinción que mereces.</p>
+                        <div class="mt-4 d-flex gap-3">
+                            <a href="contacto.html" class="btn-reserva px-4 py-3 fs-6">Cotiza con Nosotros</a>
+                            <a href="galeria.html" class="btn btn-outline-light rounded-pill px-4 py-3 fs-6 fw-semibold">Ver Galería</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </header>
+
+    <section class="py-5 bg-dynamic-alt" style="border-bottom: 1px solid var(--border-color);">
+        <div class="container text-center text-accent">
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold mb-0">1000+</h2>
+                    <p class="mb-0 fw-medium text-secondary">Eventos Realizados</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold mb-0">200+</h2>
+                    <p class="mb-0 fw-medium text-secondary">Personas Aliadas</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold mb-0">95%</h2>
+                    <p class="mb-0 fw-medium text-secondary">Clientes Satisfechos</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold mb-0">700+</h2>
+                    <p class="mb-0 fw-medium text-secondary">Recomendaciones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 my-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="position-relative p-2">
+                        <img src="./assets/img/promotora.jpg" alt="Zulema Quezada" class="img-fluid rounded shadow-lg w-100" style="object-fit: cover; max-height: 520px;">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <span class="badge-dynamic">DIRECCIÓN CREATIVA</span>
+                    <h2 class="fst-italic display-6 mb-4">Artista en Decoración & Experiencias de Lujo</h2>
+                    <p class="mb-4">En INARA creemos que la vida funciona mejor cuando tú te sientes bien para seguir construyendo lo que te importa. Nos encargamos de que cada detalle de tu evento sea perfecto, combinando estética, elegancia y un equipo humano de primera categoría.</p>
+                    <div class="row g-4 mb-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fa-solid fa-check text-accent fs-4"></i>
+                                <span class="fw-semibold text-primary">Catering de Autor</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fa-solid fa-check text-accent fs-4"></i>
+                                <span class="fw-semibold text-primary">Mobiliario Exclusivo</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fa-solid fa-check text-accent fs-4"></i>
+                                <span class="fw-semibold text-primary">Asesoría de Inicio a Fin</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fa-solid fa-check text-accent fs-4"></i>
+                                <span class="fw-semibold text-primary">Locaciones Seleccionadas</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="fw-bold fs-5 text-accent mb-4">Aquí tus eventos serán de otra galaxia</p>
+                    <a href="sobre-nosotros.html" class="btn-reserva">Conoce Nuestra Historia</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-dynamic-alt">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <span class="badge-dynamic">COBERTURA INTEGRAL</span>
+                <h2 class="display-6 fw-bold">Nuestras Especialidades</h2>
+                <p class="text-secondary mx-auto mt-2" style="max-width: 600px;">Desde fiestas temáticas vanguardistas hasta bodas de alta etiqueta, producimos atmósferas que perduran.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-dynamic h-100 p-4">
+                        <div class="icon-box"><i class="fa-solid fa-champagne-glasses"></i></div>
+                        <h4 class="mb-3">Bodas de Ensueño</h4>
+                        <p class="mb-4">Diseño escenográfico integral, altares románticos, iluminación inteligente y banquetes memorables para el día más esperado.</p>
+                        <a href="servicios.html" class="text-accent text-decoration-none fw-bold mt-auto">Saber más <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-dynamic h-100 p-4">
+                        <div class="icon-box"><i class="fa-solid fa-crown"></i></div>
+                        <h4 class="mb-3">Quinceañeros & Promociones</h4>
+                        <p class="mb-4">Montajes juveniles de impacto, pistas LED, cabinas temáticas y el ritmo que convierte cada instante en tendencia.</p>
+                        <a href="servicios.html" class="text-accent text-decoration-none fw-bold mt-auto">Saber más <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-dynamic h-100 p-4">
+                        <div class="icon-box"><i class="fa-solid fa-building"></i></div>
+                        <h4 class="mb-3">Eventos Corporativos</h4>
+                        <p class="mb-4">Lanzamientos de producto, aniversarios institucionales y cenas de gala ejecutadas con la máxima sobriedad y protocolo.</p>
+                        <a href="servicios.html" class="text-accent text-decoration-none fw-bold mt-auto">Saber más <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 my-5">
+        <div class="container text-center">
+            <span class="badge-dynamic">TESTIMONIOS REALES</span>
+            <h2 class="display-6 fw-bold mb-5">Clientes que Vivieron la Experiencia</h2>
+            <div class="row g-4 text-start">
+                <div class="col-lg-4">
+                    <div class="card-dynamic p-4 h-100">
+                        <div class="d-flex text-accent mb-3">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="fst-italic mb-4">"Nuestra boda fue tal cual la soñamos. El equipo de INARA se encargó de todo y nosotros solo nos dedicamos a disfrutar. La decoración fue espectacular."</p>
+                        <h6 class="fw-bold mb-0 text-accent">Familia Gómez Silva</h6>
+                        <small class="text-secondary">Matrimonio Residencial</small>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card-dynamic p-4 h-100">
+                        <div class="d-flex text-accent mb-3">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="fst-italic mb-4">"El mejor quinceañero que pudimos darle a nuestra hija. La ambientación quedó de revista y todos los invitados elogiaron el buffet."</p>
+                        <h6 class="fw-bold mb-0 text-accent">Carlos & Mariana</h6>
+                        <small class="text-secondary">Quinceañero de Ensueño</small>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card-dynamic p-4 h-100">
+                        <div class="d-flex text-accent mb-3">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="fst-italic mb-4">"Organizamos la gala corporativa anual y superaron cualquier expectativa previa. Puntualidad impecable y comida de primer nivel."</p>
+                        <h6 class="fw-bold mb-0 text-accent">Tech Soluciones SAC</h6>
+                        <small class="text-secondary">Evento Corporativo</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section text-center py-5 bg-dynamic-alt">
+        <div class="container py-4">
+            <h2 class="display-5 fw-bold mb-3">¿Tienes una visión o un proyecto en mente?</h2>
+            <p class="mx-auto mb-5 text-secondary" style="max-width: 650px; font-size: 1.05rem;">Permítenos ayudarte a planificar y realizar el evento que siempre has imaginado con el refinamiento y la elegancia que solo INARA puede ofrecer.</p>
+            <a href="contacto.html" class="btn-reserva px-5 py-3 fs-5">COTIZA TU EVENTO</a>
+        </div>
+    </section>
+
+    <footer class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo mb-3">
+                    <p class="pe-lg-5" style="font-size: 0.9rem;">La casa de eventos de lujo que transforma tus sueños en celebraciones inolvidables. Diseño, elegancia y atención al detalle.</p>
+                    <p class="mt-4 mb-0" style="font-size: 0.85rem;">&copy; 2026 INARA Casa de Eventos. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h6 class="text-accent fw-bold mb-4">Navegación</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><a href="index.html" class="text-decoration-none" style="color: inherit;">Inicio</a></li>
+                        <li class="mb-3"><a href="servicios.html" class="text-decoration-none" style="color: inherit;">Servicios</a></li>
+                        <li class="mb-3"><a href="galeria.html" class="text-decoration-none" style="color: inherit;">Galería</a></li>
+                        <li class="mb-3"><a href="sobre-nosotros.html" class="text-decoration-none" style="color: inherit;">Sobre Nosotros</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <h6 class="text-accent fw-bold mb-4">Contacto</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">Villa María del Triunfo, Lima</li>
+                        <li class="mb-3">eventos@inara.com</li>
+                        <li class="mb-3">+51 987 654 321</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h6 class="text-accent fw-bold mb-4">Síguenos</h6>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="social-btn"><i class="fa-solid fa-envelope"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/inaraeventos.pe?igsi=ZGJrb2tyMndma2x2" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
