@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INARA | Panel de Administración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dynamic py-2 sticky-top border-bottom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="index.html">
+                <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo" style="height: 40px;">
+            </a>
+            
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-accent fw-bold d-none d-md-block">Panel Administrativo</span>
+                <button class="theme-toggle-btn">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <a href="index.html" class="btn-reserva py-2 px-3 btn-logout" style="font-size: 0.8rem;">CERRAR SESIÓN</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            <div class="col-md-3 col-lg-2 bg-dynamic-alt border-end p-3 pt-4">
+                <div class="nav flex-column nav-pills gap-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link nav-link-dynamic text-start active" id="v-pills-servicios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-servicios" type="button" role="tab">
+                        <i class="fa-solid fa-bell-concierge me-2"></i> Servicios
+                    </button>
+                    <button class="nav-link nav-link-dynamic text-start" id="v-pills-reservas-tab" data-bs-toggle="pill" data-bs-target="#v-pills-reservas" type="button" role="tab">
+                        <i class="fa-solid fa-calendar-check me-2"></i> Reservas
+                    </button>
+                    <button class="nav-link nav-link-dynamic text-start" id="v-pills-usuarios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-usuarios" type="button" role="tab">
+                        <i class="fa-solid fa-users me-2"></i> Usuarios
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-9 col-lg-10 p-4 p-lg-5 bg-dynamic">
+                <div class="tab-content" id="v-pills-tabContent">
+                    
+                    <!-- MÓDULO SERVICIOS -->
+                    <div class="tab-pane fade show active" id="v-pills-servicios" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h2 class="mb-1 fw-bold">Gestión de Servicios</h2>
+                                <p class="text-secondary small">Administra los paquetes que ofreces a tus clientes.</p>
+                            </div>
+                            <button class="btn-main shadow-sm" data-bs-toggle="modal" data-bs-target="#modalServicio" onclick="limpiarModalServicio()">
+                                <i class="fa-solid fa-plus me-2"></i> Nuevo Servicio
+                            </button>
+                        </div>
+                        <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                        <tr>
+                                            <th class="p-4">Imagen</th>
+                                            <th class="p-4">Servicio</th>
+                                            <th class="p-4">Precio Base</th>
+                                            <th class="p-4">Estado</th>
+                                            <th class="p-4 text-end">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaServiciosBody">
+                                        <!-- JS inyectará los servicios aquí -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- MÓDULO RESERVAS -->
+                    <div class="tab-pane fade" id="v-pills-reservas" role="tabpanel">
+                        <div class="mb-4">
+                            <h2 class="mb-1 fw-bold">Citas y Reservas</h2>
+                            <p class="text-secondary small">Monitorea las solicitudes de cotización de tus clientes.</p>
+                        </div>
+                        <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                        <tr>
+                                            <th class="p-4">Contacto</th>
+                                            <th class="p-4">Evento</th>
+                                            <th class="p-4">Detalles Técnicos</th>
+                                            <th class="p-4">Estado</th>
+                                            <th class="p-4 text-end">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaReservasBody">
+                                        <!-- JS inyectará las reservas aquí -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- MÓDULO USUARIOS -->
+                    <div class="tab-pane fade" id="v-pills-usuarios" role="tabpanel">
+                        <div class="mb-4">
+                            <h2 class="mb-1 fw-bold">Usuarios Registrados</h2>
+                            <p class="text-secondary small">Base de datos de clientes y administradores.</p>
+                        </div>
+                        <div id="contenedorUsuariosAdmin" class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
+                            <!-- JS inyectará la tabla de usuarios aquí -->
+                        </div>
+                    </div>
+            
+                </div>
+            </div>
+
+            <!-- MODAL DE SERVICIOS ACTUALIZADO CON INPUT TYPE FILE -->
+            <div class="modal fade" id="modalServicio" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content card-dynamic border-0">
+                        <div class="modal-header border-bottom-0 pb-0">
+                            <h3 class="modal-title fw-bold text-accent" id="tituloModalServicio">Registrar Servicio</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="limpiarModalServicio()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formCrudServicio">
+                                <input type="hidden" id="idServicioInput"> <!-- Campo oculto para edición -->
+                                
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">NOMBRE DEL SERVICIO</label>
+                                    <input type="text" id="nombreServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">PRECIO BASE (S/)</label>
+                                        <input type="number" id="precioServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">SELECCIONAR IMAGEN</label>
+                                        <!-- Input que abre el explorador de archivos -->
+                                        <input type="file" id="imgServInput" class="form-control rounded-3 py-1 bg-dynamic-alt border-0 text-secondary" accept="image/jpeg, image/png, image/webp" required>
+                                        <!-- Campo oculto para mantener la ruta al editar -->
+                                        <input type="hidden" id="imgServOculto">
+                                        <!-- Texto para mostrar la imagen actual al editar -->
+                                        <small id="imgActualTexto" class="text-accent d-none mt-1" style="font-size: 0.75rem;">Actual: <span class="fw-bold"></span></small>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold">DESCRIPCIÓN</label>
+                                    <textarea id="descServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn-main w-100 py-3" id="btnGuardarServicio">GUARDAR SERVICIO</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/supabase.js"></script>
+</body>
+</html>

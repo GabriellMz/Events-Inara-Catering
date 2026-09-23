@@ -17,7 +17,16 @@
     <nav class="navbar navbar-expand-lg navbar-dynamic py-3 sticky-top">
         <div class="container d-flex justify-content-between align-items-center">
             
+            <a class="navbar-brand d-lg-none" href="index.html">
+                <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
+            </a>
+
             <div class="d-flex align-items-center gap-2 d-lg-none">
+                <div class="auth-container">
+                    <a href="login.html" class="nav-icon-btn text-decoration-none" title="Iniciar Sesión">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                </div>
                 <button class="theme-toggle-btn">
                     <i class="fa-solid fa-moon"></i>
                 </button>
@@ -25,44 +34,35 @@
                     <i class="fa-solid fa-bars text-accent fs-3"></i>
                 </button>
             </div>
-            
-            <a class="navbar-brand d-lg-none mx-auto" href="index.html">
-                <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
-            </a>
-            
-            <div class="d-lg-none" style="width: 45px;"></div>
 
-            <div class="collapse navbar-collapse justify-content-between align-items-center w-100" id="nav">
-                <ul class="navbar-nav flex-row gap-4 align-items-center d-none d-lg-flex mb-0" style="flex: 1; justify-content: flex-end; padding-right: 2.5rem;">
+            <div class="collapse navbar-collapse justify-content-center" id="nav">
+                <ul class="navbar-nav align-items-center gap-lg-4 text-center mt-3 mt-lg-0">
                     <li class="nav-item"><a class="nav-link nav-link-dynamic active" href="index.html">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-dynamic" href="servicios.html">Servicios</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-dynamic" href="galeria.html">Galería</a></li>
-                </ul>
+                    
+                    <a class="navbar-brand d-none d-lg-block mx-4" href="index.html">
+                        <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
+                    </a>
 
-                <a class="navbar-brand d-none d-lg-block mx-0 text-center" href="index.html">
-                    <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo">
-                </a>
-
-                <ul class="navbar-nav flex-row gap-4 align-items-center d-none d-lg-flex mb-0" style="flex: 1; justify-content: flex-start; padding-left: 2.5rem;">
                     <li class="nav-item"><a class="nav-link nav-link-dynamic" href="sobre-nosotros.html">Sobre Nosotros</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-dynamic" href="contacto.html">Contacto</a></li>
-                    <li class="nav-item">
+                    
+                    <li class="nav-item d-none d-lg-block">
+                        <div class="auth-container">
+                            <a href="login.html" class="nav-icon-btn text-decoration-none" title="Iniciar Sesión">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
                         <button class="theme-toggle-btn ms-2">
                             <i class="fa-solid fa-moon"></i>
                         </button>
                     </li>
-                    <li class="nav-item ms-2">
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
                         <a href="contacto.html" class="btn-reserva">RESERVAR CITA</a>
                     </li>
-                </ul>
-
-                <ul class="navbar-nav d-lg-none text-center w-100 py-3 gap-2">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="galeria.html">Galería</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sobre-nosotros.html">Sobre Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
-                    <li class="nav-item mt-2"><a href="contacto.html" class="btn-reserva">RESERVAR CITA</a></li>
                 </ul>
             </div>
         </div>
@@ -300,6 +300,8 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/supabase.js"></script>
 </body>
 </html>
