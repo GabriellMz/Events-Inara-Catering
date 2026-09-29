@@ -32,6 +32,7 @@
                         <div class="role-btn" data-role="admin">Administrador</div>
                     </div>
 
+                    <!-- FORMULARIO LOGIN -->
                     <form id="loginForm">
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Email / Usuario</label>
@@ -51,7 +52,8 @@
                         </div>
 
                         <div class="d-flex justify-content-end mb-4">
-                            <a href="#" class="text-accent text-decoration-none small fw-medium">¿Olvidaste tu contraseña?</a>
+                            <!-- NUEVO ENLACE CON MODAL -->
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalRecuperar" class="text-accent text-decoration-none small fw-medium">¿Olvidaste tu contraseña?</a>
                         </div>
 
                         <button type="submit" class="btn-cream mb-4">INICIAR SESIÓN</button>
@@ -62,7 +64,16 @@
                         </div>
                     </form>
 
+                    <!-- FORMULARIO REGISTRO -->
                     <form id="registerForm" class="d-none">
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary text-uppercase mb-3">DNI</label>
+                            <div class="login-input-group">
+                                <i class="fa-regular fa-id-card icon-left"></i>
+                                <input type="text" id="regDni" class="form-control login-input" placeholder="8 dígitos" maxlength="8" pattern="[0-9]{8}" required>
+                            </div>
+                        </div>
+
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Nombre Completo</label>
                             <div class="login-input-group">
@@ -104,6 +115,30 @@
                         </div>
                     </form>
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE RECUPERACIÓN DE CONTRASEÑA -->
+    <div class="modal fade" id="modalRecuperar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h4 class="modal-title fw-bold text-accent">Recuperar Acceso</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-secondary mb-4 small">Ingresa el correo electrónico asociado a tu cuenta. Te enviaremos un enlace seguro para restablecer tu contraseña.</p>
+                    <form id="formRecuperarPass">
+                        <div class="mb-4">
+                            <div class="login-input-group">
+                                <i class="fa-regular fa-envelope icon-left"></i>
+                                <input type="email" id="emailRecuperacion" class="form-control login-input" placeholder="tu_correo@inara.com" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-main w-100 py-3">ENVIAR ENLACE</button>
+                    </form>
                 </div>
             </div>
         </div>
