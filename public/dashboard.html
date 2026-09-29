@@ -21,7 +21,7 @@
                 <button class="theme-toggle-btn">
                     <i class="fa-solid fa-moon"></i>
                 </button>
-                <a href="index.html" class="btn-reserva py-2 px-3 btn-logout" style="font-size: 0.8rem;">CERRAR SESIÓN</a>
+                <a href="#" class="btn-reserva py-2 px-3 btn-logout" style="font-size: 0.8rem;">CERRAR SESIÓN</a>
             </div>
         </div>
     </nav>
@@ -37,7 +37,7 @@
                         <i class="fa-solid fa-calendar-check me-2"></i> Reservas
                     </button>
                     <button class="nav-link nav-link-dynamic text-start" id="v-pills-usuarios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-usuarios" type="button" role="tab">
-                        <i class="fa-solid fa-users me-2"></i> Usuarios
+                        <i class="fa-solid fa-users-gear me-2"></i> Usuarios
                     </button>
                 </div>
             </div>
@@ -68,9 +68,7 @@
                                             <th class="p-4 text-end">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tablaServiciosBody">
-                                        <!-- JS inyectará los servicios aquí -->
-                                    </tbody>
+                                    <tbody id="tablaServiciosBody"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -80,7 +78,7 @@
                     <div class="tab-pane fade" id="v-pills-reservas" role="tabpanel">
                         <div class="mb-4">
                             <h2 class="mb-1 fw-bold">Citas y Reservas</h2>
-                            <p class="text-secondary small">Monitorea las solicitudes de cotización de tus clientes.</p>
+                            <p class="text-secondary small">Monitorea las solicitudes de cotización y agrega notas internas.</p>
                         </div>
                         <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
                             <div class="table-responsive">
@@ -91,32 +89,66 @@
                                             <th class="p-4">Evento</th>
                                             <th class="p-4">Detalles Técnicos</th>
                                             <th class="p-4">Estado</th>
+                                            <th class="p-4 text-center">Notas Admin</th>
                                             <th class="p-4 text-end">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tablaReservasBody">
-                                        <!-- JS inyectará las reservas aquí -->
-                                    </tbody>
+                                    <tbody id="tablaReservasBody"></tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
             
-                    <!-- MÓDULO USUARIOS -->
+                    <!-- MÓDULO USUARIOS (Tablas Separadas) -->
                     <div class="tab-pane fade" id="v-pills-usuarios" role="tabpanel">
-                        <div class="mb-4">
-                            <h2 class="mb-1 fw-bold">Usuarios Registrados</h2>
-                            <p class="text-secondary small">Base de datos de clientes y administradores.</p>
+                        <div class="mb-5 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h2 class="mb-1 fw-bold">Gestión de Personal y Clientes</h2>
+                                <p class="text-secondary small">Tablas independientes para mayor seguridad.</p>
+                            </div>
                         </div>
-                        <div id="contenedorUsuariosAdmin" class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
-                            <!-- JS inyectará la tabla de usuarios aquí -->
+
+                        <!-- TABLA ADMINISTRADORES -->
+                        <h4 class="text-accent mb-3"><i class="fa-solid fa-user-shield me-2"></i> Equipo de Administradores</h4>
+                        <div class="card-dynamic p-0 shadow-sm border-0 mb-5" style="border-radius: 15px; overflow: hidden;">
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                        <tr>
+                                            <th class="p-4">DNI</th>
+                                            <th class="p-4">Administrador</th>
+                                            <th class="p-4">Contacto</th>
+                                            <th class="p-4 text-end">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaUsuariosAdminBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TABLA CLIENTES -->
+                        <h4 class="text-accent mb-3"><i class="fa-solid fa-users me-2"></i> Clientes Registrados</h4>
+                        <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                        <tr>
+                                            <th class="p-4">DNI</th>
+                                            <th class="p-4">Cliente</th>
+                                            <th class="p-4">Contacto</th>
+                                            <th class="p-4 text-end">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaUsuariosClienteBody"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
             
                 </div>
             </div>
 
-            <!-- MODAL DE SERVICIOS ACTUALIZADO CON INPUT TYPE FILE -->
+            <!-- MODAL DE SERVICIOS -->
             <div class="modal fade" id="modalServicio" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content card-dynamic border-0">
@@ -126,8 +158,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="formCrudServicio">
-                                <input type="hidden" id="idServicioInput"> <!-- Campo oculto para edición -->
-                                
+                                <input type="hidden" id="idServicioInput"> 
                                 <div class="mb-3">
                                     <label class="form-label small fw-bold">NOMBRE DEL SERVICIO</label>
                                     <input type="text" id="nombreServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
@@ -139,11 +170,8 @@
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label small fw-bold">SELECCIONAR IMAGEN</label>
-                                        <!-- Input que abre el explorador de archivos -->
                                         <input type="file" id="imgServInput" class="form-control rounded-3 py-1 bg-dynamic-alt border-0 text-secondary" accept="image/jpeg, image/png, image/webp" required>
-                                        <!-- Campo oculto para mantener la ruta al editar -->
                                         <input type="hidden" id="imgServOculto">
-                                        <!-- Texto para mostrar la imagen actual al editar -->
                                         <small id="imgActualTexto" class="text-accent d-none mt-1" style="font-size: 0.75rem;">Actual: <span class="fw-bold"></span></small>
                                     </div>
                                 </div>
@@ -157,6 +185,54 @@
                     </div>
                 </div>
             </div>
+
+            <!-- MODAL DE NOTAS PARA RESERVAS -->
+            <div class="modal fade" id="modalNotaReserva" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
+                        <div class="modal-header border-bottom-0 pb-0">
+                            <h4 class="modal-title fw-bold text-accent">Notas del Administrador</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <form id="formNotaReserva">
+                                <input type="hidden" id="idReservaNotaInput">
+                                <div class="mb-4">
+                                    <textarea id="notaReservaInput" class="form-control rounded-3 py-3 bg-dynamic-alt border-0 text-secondary" rows="5" placeholder="Ej. Cliente VIP, llamar el viernes a las 10 AM..."></textarea>
+                                </div>
+                                <button type="submit" class="btn-main w-100 py-3">GUARDAR NOTA</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL PARA CAMBIAR ROL (MUEVE ENTRE TABLAS) -->
+            <div class="modal fade" id="modalEditarRol" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm">
+                    <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
+                        <div class="modal-header border-bottom-0 pb-0">
+                            <h5 class="modal-title fw-bold text-accent">Modificar Acceso</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <form id="formEditarRol">
+                                <input type="hidden" id="idUsuarioRol">
+                                <input type="hidden" id="rolActualUsuario">
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold">MOVER A TABLA</label>
+                                    <select id="selectRolUsuario" class="form-select rounded-3 py-2 bg-dynamic-alt border-0 text-secondary">
+                                        <option value="cliente">Tabla Clientes</option>
+                                        <option value="admin">Tabla Administradores</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-main w-100 py-2">ACTUALIZAR</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

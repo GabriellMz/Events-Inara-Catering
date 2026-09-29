@@ -5,27 +5,37 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 document.addEventListener('DOMContentLoaded', async () => {
     
     // ==========================================
-    // 1. MANEJO DE SESIÓN Y PROTECCIÓN DE RUTAS
+    // 1. MANEJO DE SESIÓN CON TABLAS SEPARADAS
     // ==========================================
     const { data: { session } } = await supabaseClient.auth.getSession();
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     
     let profile = null;
-    if (session) {
-        const { data } = await supabaseClient
-            .from('perfiles')
-            .select('nombre_completo, rol')
-            .eq('id', session.user.id)
-            .single();
-        profile = data;
+    let userRole = null;
+
+    if (session && session.user) {
+        // Buscamos primero en Administradores
+        const { data: adminData } = await supabaseClient.from('administradores').select('*').eq('correo', session.user.email).single();
+        
+        if (adminData) {
+            profile = adminData;
+            userRole = 'admin';
+        } else {
+            // Si no está, lo buscamos en Clientes
+            const { data: clientData } = await supabaseClient.from('clientes').select('*').eq('correo', session.user.email).single();
+            if (clientData) {
+                profile = clientData;
+                userRole = 'cliente';
+            }
+        }
     }
 
     if (session && profile) {
         if (currentPage === 'login.html') {
-            window.location.href = profile.rol === 'admin' ? 'dashboard.html' : 'index.html';
+            window.location.href = userRole === 'admin' ? 'dashboard.html' : 'index.html';
             return;
         }
-        if (currentPage === 'dashboard.html' && profile.rol !== 'admin') {
+        if (currentPage === 'dashboard.html' && userRole !== 'admin') {
             window.location.href = 'index.html';
             return;
         }
@@ -70,22 +80,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const email = loginForm.querySelector('input[type="email"]').value;
             const password = document.getElementById('loginPassword').value;
 
-            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
-                email, password
-            });
+            const { error: authError } = await supabaseClient.auth.signInWithPassword({ email, password });
 
             if (authError) {
                 alert('Credenciales incorrectas o usuario no encontrado.');
                 return;
             }
 
-            const { data: currentProfile } = await supabaseClient
-                .from('perfiles')
-                .select('rol')
-                .eq('id', authData.user.id)
-                .single();
-
-            window.location.href = (currentProfile && currentProfile.rol === 'admin') ? 'dashboard.html' : 'index.html';
+            // Validar de qué tabla proviene para redirigir
+            const { data: isAdmin } = await supabaseClient.from('administradores').select('id').eq('correo', email).single();
+            window.location.href = isAdmin ? 'dashboard.html' : 'index.html';
         });
     }
 
@@ -93,6 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const dni = document.getElementById('regDni').value;
             const nombre = document.getElementById('regNombre').value;
             const email = document.getElementById('regEmail').value;
             const telefono = document.getElementById('regTelefono').value;
@@ -106,17 +111,42 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             if (authData.user) {
-                const { error: insertError } = await supabaseClient.from('perfiles').insert([
-                    { id: authData.user.id, nombre_completo: nombre, telefono: telefono, rol: 'cliente' }
+                // Ahora los registros van directamente a la tabla 'clientes'
+                const { error: insertError } = await supabaseClient.from('clientes').insert([
+                    { dni: dni, nombre_completo: nombre, correo: email, telefono: telefono }
                 ]);
 
-                if (insertError) alert('Hubo un error al guardar el perfil: ' + insertError.message);
-                else {
+                if (insertError) {
+                    alert('Hubo un error al guardar el perfil: ' + insertError.message);
+                } else {
                     await supabaseClient.auth.signOut();
                     alert('¡Cuenta creada exitosamente! Ya puedes iniciar sesión con tus credenciales.');
                     document.getElementById('btnSwitchToLogin').click();
                     registerForm.reset();
                 }
+            }
+        });
+    }
+
+    // ==========================================
+    // RECUPERACIÓN DE CONTRASEÑA
+    // ==========================================
+    const formRecuperarPass = document.getElementById('formRecuperarPass');
+    if (formRecuperarPass) {
+        formRecuperarPass.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('emailRecuperacion').value;
+
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + '/login.html', 
+            });
+
+            if (error) {
+                alert('Error al enviar el enlace. Verifica que el correo esté registrado.');
+            } else {
+                alert('¡Enlace enviado! Revisa tu bandeja de entrada o carpeta de SPAM.');
+                document.querySelector('#modalRecuperar .btn-close').click();
+                formRecuperarPass.reset();
             }
         });
     }
@@ -138,10 +168,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const invitados = document.getElementById('invitadosInput') ? parseInt(document.getElementById('invitadosInput').value) : null;
             const detalles = document.getElementById('detallesInput') ? document.getElementById('detallesInput').value : '';
 
-            const { data: { user } } = await supabaseClient.auth.getUser();
+            // Si es un admin haciendo prueba, no vinculamos cliente_id para que no crashee
+            const clienteIdInsert = userRole === 'cliente' ? profile.id : null;
 
             const { error: insertError } = await supabaseClient.from('reservas').insert([{ 
-                perfil_id: user ? user.id : null, 
+                cliente_id: clienteIdInsert, 
                 tipo_evento: tipoEvento, 
                 fecha_tentativa: fecha, 
                 cantidad_invitados: invitados, 
@@ -168,15 +199,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (tablaServiciosBody) {
         cargarServiciosAdmin();
         cargarReservasAdmin();
-        cargarUsuariosAdmin();
+        cargarUsuariosAdmin(); // Carga las 2 tablas
     }
 
-    // (Opcional) Si decides integrar dinámicamente la web después
-    const contenedorServiciosWeb = document.getElementById('contenedorServiciosWeb');
-    if (contenedorServiciosWeb) cargarServiciosWeb();
-
     // ==========================================
-    // 5. CRUD DE SERVICIOS (Formulario Modal)
+    // 5. CRUD DE SERVICIOS
     // ==========================================
     const formCrudServicio = document.getElementById('formCrudServicio');
     if (formCrudServicio) {
@@ -190,7 +217,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const fileInput = document.getElementById('imgServInput');
             let imagen_url = document.getElementById('imgServOculto').value;
 
-            // Extraer nombre del archivo local y armar ruta
             if (fileInput.files.length > 0) {
                 imagen_url = `./assets/img/${fileInput.files[0].name}`;
             }
@@ -201,19 +227,74 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             if (id) {
-                // MODIFICAR
-                const { error } = await supabaseClient.from('servicios').update({ nombre, precio, imagen_url, descripcion }).eq('id', id);
-                if (!error) {
-                    alert('Servicio actualizado correctamente.');
-                    window.location.reload();
-                } else alert('Error al actualizar.');
+                await supabaseClient.from('servicios').update({ nombre, precio, imagen_url, descripcion }).eq('id', id);
             } else {
-                // CREAR
-                const { error } = await supabaseClient.from('servicios').insert([{ nombre, precio, imagen_url, descripcion, estado: 'activo' }]);
-                if (!error) {
-                    alert('Servicio registrado exitosamente.');
-                    window.location.reload();
-                } else alert('Error al guardar el servicio.');
+                await supabaseClient.from('servicios').insert([{ nombre, precio, imagen_url, descripcion, estado: 'activo' }]);
+            }
+            window.location.reload();
+        });
+    }
+
+    // ==========================================
+    // 6. GUARDAR NOTA EN RESERVA
+    // ==========================================
+    const formNotaReserva = document.getElementById('formNotaReserva');
+    if (formNotaReserva) {
+        formNotaReserva.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const idReserva = document.getElementById('idReservaNotaInput').value;
+            const nota = document.getElementById('notaReservaInput').value;
+
+            const { error } = await supabaseClient.from('reservas').update({ nota_admin: nota }).eq('id', idReserva);
+            
+            if (!error) {
+                document.querySelector('#modalNotaReserva .btn-close').click();
+                cargarReservasAdmin(); 
+            } else {
+                alert('Error al guardar la nota.');
+            }
+        });
+    }
+
+    // ==========================================
+    // 7. MIGRAR ROL (MOVER DE TABLA)
+    // ==========================================
+    const formEditarRol = document.getElementById('formEditarRol');
+    if (formEditarRol) {
+        formEditarRol.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const idUsuario = document.getElementById('idUsuarioRol').value;
+            const rolActual = document.getElementById('rolActualUsuario').value;
+            const nuevoRol = document.getElementById('selectRolUsuario').value;
+
+            if (rolActual === nuevoRol) {
+                document.querySelector('#modalEditarRol .btn-close').click();
+                return;
+            }
+
+            const tablaOrigen = rolActual === 'admin' ? 'administradores' : 'clientes';
+            const tablaDestino = nuevoRol === 'admin' ? 'administradores' : 'clientes';
+
+            // 1. Extraemos los datos de la tabla vieja
+            const { data: userData } = await supabaseClient.from(tablaOrigen).select('*').eq('id', idUsuario).single();
+
+            if (userData) {
+                // 2. Lo insertamos en la tabla nueva
+                const { error: insertError } = await supabaseClient.from(tablaDestino).insert([{
+                    dni: userData.dni,
+                    nombre_completo: userData.nombre_completo,
+                    correo: userData.correo,
+                    telefono: userData.telefono
+                }]);
+
+                if (!insertError) {
+                    // 3. Lo borramos de la tabla vieja
+                    await supabaseClient.from(tablaOrigen).delete().eq('id', idUsuario);
+                    document.querySelector('#modalEditarRol .btn-close').click();
+                    cargarUsuariosAdmin(); // Recarga ambas tablas en vivo
+                } else {
+                    alert('Error al mover de tabla: ' + insertError.message);
+                }
             }
         });
     }
@@ -221,14 +302,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 // ==========================================
-// FUNCIONES GLOBALES (DASHBOARD Y CLIENTE)
+// FUNCIONES GLOBALES (DASHBOARD)
 // ==========================================
 window.listaServiciosGlobal = [];
+window.listaReservasGlobal = [];
+window.listaAdminsGlobal = [];
+window.listaClientesGlobal = [];
 
 async function cargarServiciosAdmin() {
     const tabla = document.getElementById('tablaServiciosBody');
     if (!tabla) return;
-    const { data: servicios, error } = await supabaseClient.from('servicios').select('*').order('id', { ascending: false });
+    const { data: servicios, error } = await supabaseClient.from('servicios').select('*').order('id', { ascending: true });
     if (error) return;
 
     window.listaServiciosGlobal = servicios;
@@ -261,7 +345,6 @@ window.prepararEdicion = function(id) {
         document.getElementById('nombreServInput').value = servicio.nombre;
         document.getElementById('precioServInput').value = servicio.precio;
         document.getElementById('descServInput').value = servicio.descripcion;
-        
         document.getElementById('imgServOculto').value = servicio.imagen_url;
         document.getElementById('imgServInput').value = ''; 
         document.getElementById('imgServInput').removeAttribute('required'); 
@@ -269,7 +352,6 @@ window.prepararEdicion = function(id) {
         const txtActual = document.getElementById('imgActualTexto');
         txtActual.classList.remove('d-none');
         txtActual.querySelector('span').innerText = servicio.imagen_url ? servicio.imagen_url.split('/').pop() : 'Ninguna';
-        
         document.getElementById('btnGuardarServicio').innerText = 'ACTUALIZAR SERVICIO';
     }
 }
@@ -285,48 +367,23 @@ window.limpiarModalServicio = function() {
     document.getElementById('btnGuardarServicio').innerText = 'GUARDAR SERVICIO';
 }
 
-async function cargarServiciosWeb() {
-    const contenedor = document.getElementById('contenedorServiciosWeb');
-    if (!contenedor) return;
-    
-    const { data: servicios, error } = await supabaseClient.from('servicios').select('*').eq('estado', 'activo').order('id', { ascending: true });
-    if (error) return;
-
-    contenedor.innerHTML = '';
-    servicios.forEach((serv, index) => {
-        const num = (index + 1).toString().padStart(2, '0');
-        contenedor.innerHTML += `
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card-dynamic h-100 border-0 p-0 shadow-sm overflow-hidden" style="border-radius: 15px;">
-                    <img src="${serv.imagen_url}" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="${serv.nombre}">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h5 class="mb-3 text-accent"><span class="text-secondary fw-normal me-2">${num}</span> ${serv.nombre}</h5>
-                        <p class="text-secondary mb-4" style="font-size: 0.9rem;">${serv.descripcion}</p>
-                        <div class="mt-auto">
-                            <h6 class="fw-bold mb-3">Precio Base: S/ ${serv.precio}</h6>
-                            <a href="contacto.html?evento=${encodeURIComponent(serv.nombre.toLowerCase())}" class="text-accent text-decoration-none fw-bold">Agendar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-}
-
 async function cargarReservasAdmin() {
     const tabla = document.getElementById('tablaReservasBody');
     if (!tabla) return;
     const { data: reservas, error } = await supabaseClient.from('reservas').select('*').order('id', { ascending: false });
     if (error) return;
 
+    window.listaReservasGlobal = reservas; 
     tabla.innerHTML = '';
-    if(reservas.length === 0) return tabla.innerHTML = '<tr><td colspan="5" class="text-center p-4">No hay reservas pendientes.</td></tr>';
+    if(reservas.length === 0) return tabla.innerHTML = '<tr><td colspan="6" class="text-center p-4">No hay reservas pendientes.</td></tr>';
     
     reservas.forEach(res => {
         const tr = document.createElement('tr');
         tr.className = 'border-bottom';
         const infoBasica = res.detalles.split('|')[0] + '<br><small class="text-secondary">' + (res.detalles.split('|')[1] || '') + '</small>';
-        
+        const notaBtnColor = (res.nota_admin && res.nota_admin.trim() !== '') ? 'btn-primary' : 'btn-outline-secondary';
+        const iconoNota = (res.nota_admin && res.nota_admin.trim() !== '') ? 'fa-comment-dots' : 'fa-comment';
+
         tr.innerHTML = `
             <td class="p-4 fw-medium text-accent">${infoBasica}</td>
             <td class="p-4 fw-bold">${res.tipo_evento}</td>
@@ -335,6 +392,11 @@ async function cargarReservasAdmin() {
                 <div class="small mt-1"><i class="fa-solid fa-users text-accent me-1"></i> ${res.cantidad_invitados ? res.cantidad_invitados + ' invitados' : 'N/A'}</div>
             </td>
             <td class="p-4"><span class="badge ${res.estado === 'pendiente' ? 'bg-warning text-dark' : 'bg-success'} px-3 py-2 rounded-pill shadow-sm">${res.estado.toUpperCase()}</span></td>
+            <td class="p-4 text-center">
+                <button class="btn btn-sm ${notaBtnColor} rounded-circle shadow-sm" onclick="abrirModalNota(${res.id})" data-bs-toggle="modal" data-bs-target="#modalNotaReserva" title="Anotaciones Internas">
+                    <i class="fa-regular ${iconoNota}"></i>
+                </button>
+            </td>
             <td class="p-4 text-end">
                 <button class="btn btn-sm btn-outline-success me-2" onclick="actualizarEstadoReserva(${res.id}, 'atendida')" title="Marcar como Atendida"><i class="fa-solid fa-check"></i></button>
                 <button class="btn btn-sm btn-outline-danger" onclick="eliminarReserva(${res.id})" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
@@ -344,35 +406,75 @@ async function cargarReservasAdmin() {
     });
 }
 
-async function cargarUsuariosAdmin() {
-    const contenedor = document.getElementById('contenedorUsuariosAdmin');
-    if (!contenedor) return;
-    const { data: perfiles, error } = await supabaseClient.from('perfiles').select('*').order('id', { ascending: false });
-    if (error) return;
+window.abrirModalNota = function(idReserva) {
+    const reserva = window.listaReservasGlobal.find(r => r.id === idReserva);
+    if(reserva) {
+        document.getElementById('idReservaNotaInput').value = reserva.id;
+        document.getElementById('notaReservaInput').value = reserva.nota_admin || ''; 
+    }
+}
 
-    let html = `
-    <div class="table-responsive">
-        <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
-            <thead class="bg-dynamic-alt text-uppercase small fw-bold">
-                <tr>
-                    <th class="p-4">Usuario</th>
-                    <th class="p-4">Teléfono</th>
-                    <th class="p-4">Rol en Sistema</th>
-                </tr>
-            </thead>
-            <tbody>
+// ==========================================
+// GESTIÓN DE TABLAS SEPARADAS DE USUARIOS
+// ==========================================
+async function cargarUsuariosAdmin() {
+    const tablaAdmin = document.getElementById('tablaUsuariosAdminBody');
+    const tablaCliente = document.getElementById('tablaUsuariosClienteBody');
+    if (!tablaAdmin || !tablaCliente) return;
+
+    // Traemos de ambas tablas de forma independiente
+    const { data: admins } = await supabaseClient.from('administradores').select('*').order('id', { ascending: true });
+    const { data: clientes } = await supabaseClient.from('clientes').select('*').order('id', { ascending: true });
+
+    window.listaAdminsGlobal = admins || [];
+    window.listaClientesGlobal = clientes || [];
+    
+    tablaAdmin.innerHTML = '';
+    tablaCliente.innerHTML = '';
+
+    if(window.listaAdminsGlobal.length === 0) tablaAdmin.innerHTML = '<tr><td colspan="4" class="text-center p-4">No hay administradores registrados.</td></tr>';
+    else window.listaAdminsGlobal.forEach(per => renderUsuarioFila(per, tablaAdmin, 'admin'));
+
+    if(window.listaClientesGlobal.length === 0) tablaCliente.innerHTML = '<tr><td colspan="4" class="text-center p-4">No hay clientes registrados.</td></tr>';
+    else window.listaClientesGlobal.forEach(per => renderUsuarioFila(per, tablaCliente, 'cliente'));
+}
+
+function renderUsuarioFila(per, tablaBody, tipo) {
+    const tr = document.createElement('tr');
+    tr.className = 'border-bottom';
+    tr.innerHTML = `
+        <td class="p-4 fw-bold text-secondary">${per.dni || 'S/N'}</td>
+        <td class="p-4 fw-bold text-accent"><i class="fa-solid fa-circle-user fs-4 me-2 align-middle"></i> ${per.nombre_completo || 'Usuario'}</td>
+        <td class="p-4 small">
+            <div><i class="fa-solid fa-envelope me-1 text-secondary"></i> ${per.correo}</div>
+            <div class="mt-1"><i class="fa-solid fa-phone me-1 text-secondary"></i> ${per.telefono || 'Sin registro'}</div>
+        </td>
+        <td class="p-4 text-end">
+            <button class="btn btn-sm btn-outline-primary me-2" onclick="prepararEdicionRol(${per.id}, '${tipo}')" data-bs-toggle="modal" data-bs-target="#modalEditarRol" title="Cambiar Rol"><i class="fa-solid fa-user-gear"></i></button>
+            <button class="btn btn-sm btn-outline-danger" onclick="eliminarUsuario(${per.id}, '${tipo}')" title="Eliminar Permanente"><i class="fa-solid fa-trash"></i></button>
+        </td>
     `;
-    perfiles.forEach(per => {
-        html += `
-            <tr class="border-bottom">
-                <td class="p-4 fw-bold text-accent"><i class="fa-solid fa-circle-user fs-4 me-2 align-middle"></i> ${per.nombre_completo || 'Usuario Anónimo'}</td>
-                <td class="p-4">${per.telefono || 'No registrado'}</td>
-                <td class="p-4"><span class="badge ${per.rol === 'admin' ? 'bg-danger' : 'bg-primary'} px-3 py-2 rounded-pill shadow-sm">${per.rol.toUpperCase()}</span></td>
-            </tr>
-        `;
-    });
-    html += `</tbody></table></div>`;
-    contenedor.innerHTML = html;
+    tablaBody.appendChild(tr);
+}
+
+window.prepararEdicionRol = function(idUsuario, tipo) {
+    const usuario = tipo === 'admin' ? window.listaAdminsGlobal.find(u => u.id === idUsuario) : window.listaClientesGlobal.find(u => u.id === idUsuario);
+    if(usuario) {
+        document.getElementById('idUsuarioRol').value = usuario.id;
+        document.getElementById('rolActualUsuario').value = tipo;
+        document.getElementById('selectRolUsuario').value = tipo;
+    }
+}
+
+// Función global para eliminar desde la tabla correspondiente
+window.eliminarUsuario = async function(id, tipo) {
+    if (confirm(`¿Estás seguro de que deseas eliminar permanentemente a este ${tipo}?`)) {
+        const tabla = tipo === 'admin' ? 'administradores' : 'clientes';
+        const { error } = await supabaseClient.from(tabla).delete().eq('id', id);
+        
+        if (!error) cargarUsuariosAdmin();
+        else alert('No se pudo eliminar el usuario.');
+    }
 }
 
 window.eliminarServicio = async function(id) {
