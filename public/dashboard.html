@@ -3,237 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INARA | Panel de Administración</title>
+    <title>INARA | Panel Administrativo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dynamic py-2 sticky-top border-bottom">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand" href="index.html">
-                <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo" style="height: 40px;">
-            </a>
+    <div class="dashboard-wrapper">
+        <!-- SIDEBAR ELEGANTE -->
+        <div class="dashboard-sidebar">
+            <div class="text-center mb-5 mt-2">
+                <a href="index.html">
+                    <img src="./assets/img/logo.jpg" alt="INARA" class="brand-logo" style="height: 50px; filter: invert(1) brightness(1.2); mix-blend-mode: screen;">
+                </a>
+                <p class="small text-white-50 mt-2" style="letter-spacing: 1px;">EVENTOS & CATERING</p>
+            </div>
             
-            <div class="d-flex align-items-center gap-3">
-                <span class="text-accent fw-bold d-none d-md-block">Panel Administrativo</span>
-                <button class="theme-toggle-btn">
-                    <i class="fa-solid fa-moon"></i>
+            <div class="nav flex-column gap-2 flex-grow-1" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="sidebar-nav-link active" id="v-pills-reservas-tab" data-bs-toggle="pill" data-bs-target="#v-pills-reservas" type="button" role="tab">
+                    <i class="fa-solid fa-table-list me-3"></i> Solicitudes (Reservas)
                 </button>
-                <a href="#" class="btn-reserva py-2 px-3 btn-logout" style="font-size: 0.8rem;">CERRAR SESIÓN</a>
+                <button class="sidebar-nav-link" id="v-pills-servicios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-servicios" type="button" role="tab">
+                    <i class="fa-solid fa-gem me-3"></i> Catálogo Servicios
+                </button>
+                <button class="sidebar-nav-link" id="v-pills-extras-tab" data-bs-toggle="pill" data-bs-target="#v-pills-extras" type="button" role="tab">
+                    <i class="fa-solid fa-wand-magic-sparkles me-3"></i> Catálogo Extras
+                </button>
+                <button class="sidebar-nav-link" id="v-pills-proveedores-tab" data-bs-toggle="pill" data-bs-target="#v-pills-proveedores" type="button" role="tab">
+                    <i class="fa-solid fa-truck-fast me-3"></i> Proveedores
+                </button>
+                <button class="sidebar-nav-link" id="v-pills-usuarios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-usuarios" type="button" role="tab">
+                    <i class="fa-solid fa-users-gear me-3"></i> Gestión Usuarios
+                </button>
+            </div>
+
+            <div class="mt-auto text-center pb-3">
+                <div class="icon-box mb-2" style="width: 40px; height: 40px; font-size: 1rem;"><i class="fa-solid fa-crown"></i></div>
+                <small class="text-white-50 d-block" style="font-size: 0.7rem;">HACIENDO EVENTOS</small>
+                <small class="text-accent fw-bold" style="font-size: 0.7rem;">EXTRAORDINARIOS</small>
             </div>
         </div>
-    </nav>
 
-    <div class="container-fluid">
-        <div class="row min-vh-100">
-            <div class="col-md-3 col-lg-2 bg-dynamic-alt border-end p-3 pt-4">
-                <div class="nav flex-column nav-pills gap-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <button class="nav-link nav-link-dynamic text-start active" id="v-pills-servicios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-servicios" type="button" role="tab">
-                        <i class="fa-solid fa-bell-concierge me-2"></i> Servicios
-                    </button>
-                    <button class="nav-link nav-link-dynamic text-start" id="v-pills-reservas-tab" data-bs-toggle="pill" data-bs-target="#v-pills-reservas" type="button" role="tab">
-                        <i class="fa-solid fa-calendar-check me-2"></i> Reservas
-                    </button>
-                    <button class="nav-link nav-link-dynamic text-start" id="v-pills-usuarios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-usuarios" type="button" role="tab">
-                        <i class="fa-solid fa-users-gear me-2"></i> Usuarios
-                    </button>
-                </div>
-            </div>
-
-            <div class="col-md-9 col-lg-10 p-4 p-lg-5 bg-dynamic">
-                <div class="tab-content" id="v-pills-tabContent">
-                    
-                    <!-- MÓDULO SERVICIOS -->
-                    <div class="tab-pane fade show active" id="v-pills-servicios" role="tabpanel">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div>
-                                <h2 class="mb-1 fw-bold">Gestión de Servicios</h2>
-                                <p class="text-secondary small">Administra los paquetes que ofreces a tus clientes.</p>
-                            </div>
-                            <button class="btn-main shadow-sm" data-bs-toggle="modal" data-bs-target="#modalServicio" onclick="limpiarModalServicio()">
-                                <i class="fa-solid fa-plus me-2"></i> Nuevo Servicio
-                            </button>
-                        </div>
-                        <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
-                            <div class="table-responsive">
-                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
-                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
-                                        <tr>
-                                            <th class="p-4">Imagen</th>
-                                            <th class="p-4">Servicio</th>
-                                            <th class="p-4">Precio Base</th>
-                                            <th class="p-4">Estado</th>
-                                            <th class="p-4 text-end">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tablaServiciosBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="dashboard-main">
             
-                    <!-- MÓDULO RESERVAS -->
-                    <div class="tab-pane fade" id="v-pills-reservas" role="tabpanel">
-                        <div class="mb-4">
-                            <h2 class="mb-1 fw-bold">Citas y Reservas</h2>
-                            <p class="text-secondary small">Monitorea las solicitudes de cotización y agrega notas internas.</p>
-                        </div>
-                        <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
-                            <div class="table-responsive">
-                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
-                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
-                                        <tr>
-                                            <th class="p-4">Contacto</th>
-                                            <th class="p-4">Evento</th>
-                                            <th class="p-4">Detalles Técnicos</th>
-                                            <th class="p-4">Estado</th>
-                                            <th class="p-4 text-center">Notas Admin</th>
-                                            <th class="p-4 text-end">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tablaReservasBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <!-- MÓDULO USUARIOS (Tablas Separadas) -->
-                    <div class="tab-pane fade" id="v-pills-usuarios" role="tabpanel">
-                        <div class="mb-5 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="mb-1 fw-bold">Gestión de Personal y Clientes</h2>
-                                <p class="text-secondary small">Tablas independientes para mayor seguridad.</p>
-                            </div>
-                        </div>
-
-                        <!-- TABLA ADMINISTRADORES -->
-                        <h4 class="text-accent mb-3"><i class="fa-solid fa-user-shield me-2"></i> Equipo de Administradores</h4>
-                        <div class="card-dynamic p-0 shadow-sm border-0 mb-5" style="border-radius: 15px; overflow: hidden;">
-                            <div class="table-responsive">
-                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
-                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
-                                        <tr>
-                                            <th class="p-4">DNI</th>
-                                            <th class="p-4">Administrador</th>
-                                            <th class="p-4">Contacto</th>
-                                            <th class="p-4 text-end">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tablaUsuariosAdminBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- TABLA CLIENTES -->
-                        <h4 class="text-accent mb-3"><i class="fa-solid fa-users me-2"></i> Clientes Registrados</h4>
-                        <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
-                            <div class="table-responsive">
-                                <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
-                                    <thead class="bg-dynamic-alt text-uppercase small fw-bold">
-                                        <tr>
-                                            <th class="p-4">DNI</th>
-                                            <th class="p-4">Cliente</th>
-                                            <th class="p-4">Contacto</th>
-                                            <th class="p-4 text-end">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tablaUsuariosClienteBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-            
+            <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom">
+                <div>
+                    <h3 class="mb-0 fw-bold">Panel de Administración</h3>
+                    <p class="text-secondary small mb-0">Control operativo del sistema</p>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="theme-toggle-btn me-2"><i class="fa-solid fa-moon"></i></button>
+                    <div class="d-flex align-items-center gap-2 auth-container"></div>
                 </div>
             </div>
 
-            <!-- MODAL DE SERVICIOS -->
-            <div class="modal fade" id="modalServicio" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content card-dynamic border-0">
-                        <div class="modal-header border-bottom-0 pb-0">
-                            <h3 class="modal-title fw-bold text-accent" id="tituloModalServicio">Registrar Servicio</h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="limpiarModalServicio()"></button>
+            <div class="tab-content" id="v-pills-tabContent">
+                
+                <!-- MÓDULO RESERVAS -->
+                <div class="tab-pane fade show active" id="v-pills-reservas" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold m-0">Solicitudes Recibidas</h4>
+                    </div>
+
+                    <div class="card-dynamic p-0 shadow-sm border-0 mb-4" style="border-radius: 12px; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                <thead class="bg-dynamic-alt text-uppercase small fw-bold" style="font-size: 0.75rem;">
+                                    <tr>
+                                        <th class="p-4 py-3">Cliente / Evento</th>
+                                        <th class="p-4 py-3">Tipo Evento</th>
+                                        <th class="p-4 py-3">Fecha & Pax</th>
+                                        <th class="p-4 py-3">Estado</th>
+                                        <th class="p-4 py-3 text-end">Gestión</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaReservasBody"></tbody>
+                            </table>
                         </div>
-                        <div class="modal-body">
-                            <form id="formCrudServicio">
-                                <input type="hidden" id="idServicioInput"> 
-                                <div class="mb-3">
-                                    <label class="form-label small fw-bold">NOMBRE DEL SERVICIO</label>
-                                    <input type="text" id="nombreServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-6">
-                                        <label class="form-label small fw-bold">PRECIO BASE (S/)</label>
-                                        <input type="number" id="precioServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label small fw-bold">SELECCIONAR IMAGEN</label>
-                                        <input type="file" id="imgServInput" class="form-control rounded-3 py-1 bg-dynamic-alt border-0 text-secondary" accept="image/jpeg, image/png, image/webp" required>
-                                        <input type="hidden" id="imgServOculto">
-                                        <small id="imgActualTexto" class="text-accent d-none mt-1" style="font-size: 0.75rem;">Actual: <span class="fw-bold"></span></small>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label small fw-bold">DESCRIPCIÓN</label>
-                                    <textarea id="descServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" rows="3" required></textarea>
-                                </div>
-                                <button type="submit" class="btn-main w-100 py-3" id="btnGuardarServicio">GUARDAR SERVICIO</button>
-                            </form>
+                    </div>
+
+                    <!-- TARJETAS KPI -->
+                    <div class="kpi-container" id="kpiContainer">
+                        <div class="kpi-card">
+                            <span class="small fw-bold text-secondary text-uppercase">Total</span>
+                            <div class="kpi-value" id="kpiTotal">0</div>
+                        </div>
+                        <div class="kpi-card border-bottom border-warning border-3">
+                            <span class="small fw-bold text-uppercase" style="color: #f39c12;"><i class="fa-solid fa-circle me-1" style="font-size: 8px;"></i> Nuevas</span>
+                            <div class="kpi-value" id="kpiPendientes">0</div>
+                        </div>
+                        <div class="kpi-card border-bottom border-info border-3">
+                            <span class="small fw-bold text-uppercase" style="color: #3498db;"><i class="fa-solid fa-circle me-1" style="font-size: 8px;"></i> Seguimiento</span>
+                            <div class="kpi-value" id="kpiProceso">0</div>
+                        </div>
+                        <div class="kpi-card border-bottom border-success border-3">
+                            <span class="small fw-bold text-uppercase" style="color: #2ecc71;"><i class="fa-solid fa-circle me-1" style="font-size: 8px;"></i> Concretadas</span>
+                            <div class="kpi-value" id="kpiConcreto">0</div>
+                        </div>
+                        <!-- NUEVA TARJETA KPI: NO CONCRETADAS -->
+                        <div class="kpi-card border-bottom border-danger border-3">
+                            <span class="small fw-bold text-uppercase" style="color: #e74c3c;"><i class="fa-solid fa-circle me-1" style="font-size: 8px;"></i> Canceladas</span>
+                            <div class="kpi-value" id="kpiNoConcreto">0</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- MODAL DE NOTAS PARA RESERVAS -->
-            <div class="modal fade" id="modalNotaReserva" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
-                        <div class="modal-header border-bottom-0 pb-0">
-                            <h4 class="modal-title fw-bold text-accent">Notas del Administrador</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <form id="formNotaReserva">
-                                <input type="hidden" id="idReservaNotaInput">
-                                <div class="mb-4">
-                                    <textarea id="notaReservaInput" class="form-control rounded-3 py-3 bg-dynamic-alt border-0 text-secondary" rows="5" placeholder="Ej. Cliente VIP, llamar el viernes a las 10 AM..."></textarea>
-                                </div>
-                                <button type="submit" class="btn-main w-100 py-3">GUARDAR NOTA</button>
-                            </form>
+                <!-- MÓDULO SERVICIOS -->
+                <div class="tab-pane fade" id="v-pills-servicios" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold m-0">Catálogo de Servicios Principales</h4>
+                        <button class="btn-main rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#modalServicio" onclick="limpiarModalServicio()">
+                            <i class="fa-solid fa-plus me-2"></i> Nuevo Servicio
+                        </button>
+                    </div>
+                    <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                    <tr>
+                                        <th class="p-4">Imagen</th>
+                                        <th class="p-4">Servicio</th>
+                                        <th class="p-4">Precio Base</th>
+                                        <th class="p-4 text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaServiciosBody"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- MODAL PARA CAMBIAR ROL (MUEVE ENTRE TABLAS) -->
-            <div class="modal fade" id="modalEditarRol" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm">
-                    <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
-                        <div class="modal-header border-bottom-0 pb-0">
-                            <h5 class="modal-title fw-bold text-accent">Modificar Acceso</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <form id="formEditarRol">
-                                <input type="hidden" id="idUsuarioRol">
-                                <input type="hidden" id="rolActualUsuario">
-                                <div class="mb-4">
-                                    <label class="form-label small fw-bold">MOVER A TABLA</label>
-                                    <select id="selectRolUsuario" class="form-select rounded-3 py-2 bg-dynamic-alt border-0 text-secondary">
-                                        <option value="cliente">Tabla Clientes</option>
-                                        <option value="admin">Tabla Administradores</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn-main w-100 py-2">ACTUALIZAR</button>
-                            </form>
+                <!-- MÓDULO EXTRAS -->
+                <div class="tab-pane fade" id="v-pills-extras" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold m-0">Servicios Extras y Adicionales</h4>
+                        <button class="btn-main rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#modalExtra" onclick="limpiarModalExtra()">
+                            <i class="fa-solid fa-plus me-2"></i> Nuevo Extra
+                        </button>
+                    </div>
+                    <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                    <tr>
+                                        <th class="p-4">Nombre del Extra</th>
+                                        <th class="p-4">Descripción</th>
+                                        <th class="p-4">Precio Unitario</th>
+                                        <th class="p-4 text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaExtrasBody"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <!-- MÓDULO PROVEEDORES -->
+                <div class="tab-pane fade" id="v-pills-proveedores" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold m-0">Gestión de Proveedores (Staff)</h4>
+                        <button class="btn-main rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#modalProveedor" onclick="limpiarModalProveedor()">
+                            <i class="fa-solid fa-plus me-2"></i> Nuevo Proveedor
+                        </button>
+                    </div>
+                    <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                    <tr>
+                                        <th class="p-4">Empresa / Nombre</th>
+                                        <th class="p-4">Contacto</th>
+                                        <th class="p-4">Teléfono</th>
+                                        <th class="p-4">Especialidad</th>
+                                        <th class="p-4 text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaProveedoresBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- MÓDULO USUARIOS -->
+                <div class="tab-pane fade" id="v-pills-usuarios" role="tabpanel">
+                    <div class="mb-4">
+                        <h4 class="fw-bold m-0">Gestión de Personal y Clientes</h4>
+                    </div>
+
+                    <h5 class="text-accent mb-3"><i class="fa-solid fa-user-shield me-2"></i> Administradores</h5>
+                    <div class="card-dynamic p-0 shadow-sm border-0 mb-5" style="border-radius: 12px; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                    <tr>
+                                        <th class="p-4">DNI</th>
+                                        <th class="p-4">Administrador</th>
+                                        <th class="p-4">Contacto</th>
+                                        <th class="p-4 text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaUsuariosAdminBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <h5 class="text-accent mb-3"><i class="fa-solid fa-users me-2"></i> Clientes</h5>
+                    <div class="card-dynamic p-0 shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover mb-0 align-middle text-secondary">
+                                <thead class="bg-dynamic-alt text-uppercase small fw-bold">
+                                    <tr>
+                                        <th class="p-4">DNI</th>
+                                        <th class="p-4">Cliente</th>
+                                        <th class="p-4">Contacto</th>
+                                        <th class="p-4 text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaUsuariosClienteBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
         </div>
+
+        <!-- ==========================================
+             MODALES DEL SISTEMA 
+        =========================================== -->
+        
+        <!-- Modal Notas Reserva -->
+        <div class="modal fade" id="modalNotaReserva" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h4 class="modal-title fw-bold text-accent">Gestión de Solicitud</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="formNotaReserva">
+                            <input type="hidden" id="idReservaNotaInput">
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-secondary">ESTADO DEL EVENTO</label>
+                                <select id="estadoReservaSelect" class="form-select rounded-3 py-2 bg-dynamic-alt border-0 text-secondary">
+                                    <option value="Pendiente">Pendiente (Nueva)</option>
+                                    <option value="En proceso">En proceso (Seguimiento)</option>
+                                    <option value="Se concretó">Se concretó (Confirmada)</option>
+                                    <option value="No se concretó">No se concretó (Cancelada)</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-secondary">NOTAS INTERNAS</label>
+                                <textarea id="notaReservaInput" class="form-control rounded-3 py-3 bg-dynamic-alt border-0 text-secondary" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="btn-main w-100 py-3">ACTUALIZAR SOLICITUD</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Servicio -->
+        <div class="modal fade" id="modalServicio" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content card-dynamic border-0">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h3 class="modal-title fw-bold text-accent" id="tituloModalServicio">Servicio</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="formCrudServicio">
+                            <input type="hidden" id="idServicioInput"> 
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">NOMBRE</label>
+                                <input type="text" id="nombreServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">PRECIO (S/)</label>
+                                    <input type="number" id="precioServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">IMAGEN</label>
+                                    <input type="file" id="imgServInput" class="form-control rounded-3 py-1 bg-dynamic-alt border-0 text-secondary" accept="image/jpeg, image/png, image/webp" required>
+                                    <input type="hidden" id="imgServOculto">
+                                    <small id="imgActualTexto" class="text-accent d-none mt-1" style="font-size: 0.75rem;">Actual: <span class="fw-bold"></span></small>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold">DESCRIPCIÓN</label>
+                                <textarea id="descServInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-main w-100 py-3">GUARDAR</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Extras -->
+        <div class="modal fade" id="modalExtra" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h4 class="modal-title fw-bold text-accent" id="tituloModalExtra">Registrar Extra</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="formCrudExtra">
+                            <input type="hidden" id="idExtraInput">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">NOMBRE DEL EXTRA</label>
+                                <input type="text" id="nombreExtraInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">PRECIO UNITARIO (S/)</label>
+                                <input type="number" step="0.01" id="precioExtraInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold">DESCRIPCIÓN</label>
+                                <textarea id="descExtraInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn-main w-100 py-3">GUARDAR EXTRA</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Proveedor -->
+        <div class="modal fade" id="modalProveedor" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h4 class="modal-title fw-bold text-accent" id="tituloModalProveedor">Registrar Proveedor</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="formCrudProveedor">
+                            <input type="hidden" id="idProveedorInput">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">EMPRESA / NOMBRE</label>
+                                <input type="text" id="empresaProvInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">CONTACTO DIRECTO</label>
+                                    <input type="text" id="contactoProvInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">TELÉFONO</label>
+                                    <input type="text" id="telefonoProvInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary">
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold">ESPECIALIDAD</label>
+                                <input type="text" id="especialidadProvInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" placeholder="Ej. Sonido, Flores, Luces..." required>
+                            </div>
+                            <button type="submit" class="btn-main w-100 py-3">GUARDAR PROVEEDOR</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Roles -->
+        <div class="modal fade" id="modalEditarRol" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content card-dynamic border-0" style="border-radius: 20px;">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h5 class="modal-title fw-bold text-accent">Modificar Acceso</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="formEditarRol">
+                            <input type="hidden" id="idUsuarioRol">
+                            <input type="hidden" id="rolActualUsuario">
+                            <div class="mb-4">
+                                <select id="selectRolUsuario" class="form-select rounded-3 py-2 bg-dynamic-alt border-0 text-secondary">
+                                    <option value="cliente">Tabla Clientes</option>
+                                    <option value="admin">Tabla Administradores</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-main w-100 py-2">MOVER USUARIO</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

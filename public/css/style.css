@@ -26,29 +26,29 @@
     --logo-blend: screen;
 }
 
-body {
+/* Transición suave y global para el modo oscuro */
+body, .bg-dynamic-alt, .card-dynamic, .navbar-dynamic, footer {
     background-color: var(--bg-primary);
     color: var(--text-secondary);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
     font-family: 'Georgia', serif;
+    transition: color 0.4s ease;
 }
 
 .brand-logo {
     height: 55px;
     mix-blend-mode: var(--logo-blend);
     filter: var(--logo-filter);
-    transition: filter 0.3s ease, mix-blend-mode 0.3s ease;
+    transition: filter 0.4s ease, mix-blend-mode 0.4s ease;
 }
 
 .navbar-dynamic {
-    background-color: var(--bg-primary);
     border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.3s ease;
 }
 
 .nav-link-dynamic {
@@ -68,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
     font-size: 1.25rem;
     cursor: pointer;
-    transition: 0.3s;
+    transition: color 0.4s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -89,15 +89,16 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     border: 1px solid var(--border-color);
+    transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 .bg-dynamic-alt {
     background-color: var(--bg-secondary);
-    transition: background-color 0.3s ease;
 }
 
 .text-accent {
     color: var(--accent) !important;
+    transition: color 0.4s ease;
 }
 
 .bg-accent {
@@ -111,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 10px 24px;
     text-decoration: none;
     border: none;
-    transition: 0.3s;
+    transition: background-color 0.4s ease, color 0.4s ease, transform 0.3s ease;
     font-weight: 600;
     display: inline-block;
 }
@@ -128,7 +129,7 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 30px;
     padding: 9px 22px;
     text-decoration: none;
-    transition: 0.3s;
+    transition: background-color 0.4s ease, color 0.4s ease, transform 0.3s ease;
     border: none;
     font-size: 0.9rem;
     letter-spacing: 0.5px;
@@ -145,7 +146,6 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-dynamic:hover {
@@ -164,6 +164,7 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-block;
     margin-bottom: 1rem;
     font-weight: 600;
+    transition: border-color 0.4s ease, color 0.4s ease;
 }
 
 .icon-box {
@@ -177,6 +178,7 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
     font-size: 1.5rem;
     margin: 0 auto 1rem auto;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 [data-theme="light"] .icon-box {
@@ -190,9 +192,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 footer {
-    background-color: var(--bg-primary);
     border-top: 1px solid var(--border-color);
-    transition: background-color 0.3s ease;
 }
 
 .social-btn {
@@ -205,7 +205,7 @@ footer {
     background-color: rgba(0,0,0,0.05);
     color: var(--text-primary);
     text-decoration: none;
-    transition: 0.3s;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 [data-theme="dark"] .social-btn {
@@ -261,7 +261,7 @@ footer {
     background-color: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
     border: 1px solid var(--border-color) !important;
-    transition: 0.3s ease;
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.3s ease;
 }
 
 .form-control:focus, .form-select:focus {
@@ -302,6 +302,7 @@ footer {
     display: flex;
     border: 1px solid var(--border-color);
     margin-bottom: 2rem;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 [data-theme="dark"] .role-switch {
@@ -340,6 +341,7 @@ footer {
     color: var(--text-secondary);
     z-index: 4;
     font-size: 1.1rem;
+    transition: color 0.4s ease;
 }
 
 .login-input-group i.icon-right {
@@ -373,7 +375,7 @@ footer {
     height: 55px;
     width: 100%;
     border: none;
-    transition: 0.3s;
+    transition: background-color 0.4s ease, transform 0.3s ease;
     letter-spacing: 1px;
 }
 
@@ -381,3 +383,145 @@ footer {
     background-color: #f4eed0;
     transform: translateY(-2px);
 }
+
+/* =========================================
+   VALIDACIONES DE FORMULARIO
+========================================= */
+.input-error {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 5px;
+    display: none; 
+}
+
+/* =========================================
+   DISEÑO DASHBOARD TIPO APLICACIÓN PREMIUM
+========================================= */
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    transition: background-color 0.4s ease;
+}
+
+.dashboard-sidebar {
+    width: 280px;
+    background-color: #0b0f19; 
+    color: white;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 2rem 1rem;
+}
+
+.dashboard-main {
+    flex: 1;
+    padding: 2rem 3rem;
+    background-color: var(--bg-secondary);
+    min-width: 0;
+    transition: background-color 0.4s ease;
+}
+
+/* Evitar el fondo blanco en las tablas (Bootstrap) */
+.table {
+    background-color: transparent !important; 
+    color: inherit !important;
+}
+
+.table th, .table td {
+    background-color: transparent !important;
+    color: inherit !important;
+    border-bottom-color: var(--border-color) !important;
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: rgba(212, 175, 55, 0.05) !important;
+}
+
+/* Cabecera de la tabla hereda el modo activo */
+.bg-dynamic-alt.text-uppercase {
+    background-color: var(--bg-secondary) !important;
+    transition: background-color 0.4s ease;
+}
+
+/* Menú lateral */
+.sidebar-nav-link {
+    color: #a0aab2;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.sidebar-nav-link:hover {
+    background-color: rgba(255,255,255,0.05);
+    color: white;
+}
+
+.sidebar-nav-link.active {
+    background-color: rgba(212, 175, 55, 0.1);
+    color: #d4af37;
+    border-left: 3px solid #d4af37;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Tarjetas KPI inferiores */
+.kpi-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.kpi-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.kpi-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-top: 10px;
+    transition: color 0.4s ease;
+}
+
+/* Badges de Estado */
+.badge-estado {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+
+.estado-pendiente { background-color: rgba(243, 156, 18, 0.15); color: #f39c12; border-color: rgba(243, 156, 18, 0.3); }
+.estado-proceso { background-color: rgba(52, 152, 219, 0.15); color: #3498db; border-color: rgba(52, 152, 219, 0.3); }
+.estado-concreto { background-color: rgba(46, 204, 113, 0.15); color: #2ecc71; border-color: rgba(46, 204, 113, 0.3); }
+.estado-noconcreto { background-color: rgba(231, 76, 60, 0.15); color: #e74c3c; border-color: rgba(231, 76, 60, 0.3); } 

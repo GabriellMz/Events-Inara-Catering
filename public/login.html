@@ -32,31 +32,33 @@
                         <div class="role-btn" data-role="admin">Administrador</div>
                     </div>
 
-                    <!-- FORMULARIO LOGIN -->
+                    <!-- FORMULARIO LOGIN (AHORA CON VALIDACIÓN) -->
                     <form id="loginForm">
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Email / Usuario</label>
-                            <div class="login-input-group">
+                            <div class="login-input-group mb-1">
                                 <i class="fa-regular fa-envelope icon-left"></i>
-                                <input type="email" class="form-control login-input" placeholder="usuario@inara.com" required>
+                                <input type="email" id="loginEmail" class="form-control login-input" placeholder="usuario@inara.com" required>
                             </div>
+                            <div class="error-message" id="errorLoginEmail"><i class="fa-solid fa-circle-exclamation me-1"></i> Usa un correo válido (ej. @gmail.com).</div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Contraseña</label>
-                            <div class="login-input-group">
+                            <div class="login-input-group mb-1">
                                 <i class="fa-solid fa-lock icon-left"></i>
                                 <input type="password" id="loginPassword" class="form-control login-input" placeholder="••••••••••••" required>
                                 <i class="fa-solid fa-eye icon-right toggle-password" data-target="loginPassword"></i>
                             </div>
+                            <div class="error-message" id="errorLoginPass"><i class="fa-solid fa-circle-exclamation me-1"></i> Mínimo 6 caracteres requeridos.</div>
                         </div>
 
                         <div class="d-flex justify-content-end mb-4">
-                            <!-- NUEVO ENLACE CON MODAL -->
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalRecuperar" class="text-accent text-decoration-none small fw-medium">¿Olvidaste tu contraseña?</a>
                         </div>
 
-                        <button type="submit" class="btn-cream mb-4">INICIAR SESIÓN</button>
+                        <!-- Botón inicia desactivado por seguridad visual -->
+                        <button type="submit" id="btnLoginSubmit" class="btn-cream mb-4" style="opacity: 0.5; cursor: not-allowed;" disabled>INICIAR SESIÓN</button>
 
                         <div class="text-center small" id="registerLinkContainer">
                             <span class="text-secondary">¿No tienes una cuenta?</span> 
@@ -64,50 +66,56 @@
                         </div>
                     </form>
 
-                    <!-- FORMULARIO REGISTRO -->
+                    <!-- FORMULARIO REGISTRO VALIDADO -->
                     <form id="registerForm" class="d-none">
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">DNI</label>
-                            <div class="login-input-group">
+                            <div class="login-input-group mb-1">
                                 <i class="fa-regular fa-id-card icon-left"></i>
-                                <input type="text" id="regDni" class="form-control login-input" placeholder="8 dígitos" maxlength="8" pattern="[0-9]{8}" required>
+                                <!-- Type text para que deje escribir letras y podamos capturar el error -->
+                                <input type="text" id="regDni" class="form-control login-input" placeholder="8 dígitos" maxlength="8" required>
                             </div>
+                            <div class="error-message" id="errorDni"><i class="fa-solid fa-circle-exclamation me-1"></i> El DNI debe contener 8 números y sin letras.</div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Nombre Completo</label>
-                            <div class="login-input-group">
+                            <div class="login-input-group mb-1">
                                 <i class="fa-regular fa-user icon-left"></i>
                                 <input type="text" id="regNombre" class="form-control login-input" placeholder="Tu nombre" required>
                             </div>
+                            <div class="error-message" id="errorNombre"><i class="fa-solid fa-circle-exclamation me-1"></i> Ingresa un nombre válido.</div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Correo Electrónico</label>
-                            <div class="login-input-group">
+                            <div class="login-input-group mb-1">
                                 <i class="fa-regular fa-envelope icon-left"></i>
                                 <input type="email" id="regEmail" class="form-control login-input" placeholder="usuario@inara.com" required>
                             </div>
+                            <div class="error-message" id="errorEmail"><i class="fa-solid fa-circle-exclamation me-1"></i> Dominio no admitido. Usa:, gmail.com, hotmail.com...</div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Teléfono</label>
-                            <div class="login-input-group">
+                            <div class="login-input-group mb-1">
                                 <i class="fa-solid fa-phone icon-left"></i>
-                                <input type="tel" id="regTelefono" class="form-control login-input" placeholder="+51 900 000 000" required>
+                                <input type="text" id="regTelefono" class="form-control login-input" placeholder="9 números (Ej. 987654321)" maxlength="9" required>
                             </div>
+                            <div class="error-message" id="errorTelefono"><i class="fa-solid fa-circle-exclamation me-1"></i> El teléfono debe tener 9 números y sin letras.</div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Contraseña</label>
-                            <div class="login-input-group">
+                            <div class="login-input-group mb-1">
                                 <i class="fa-solid fa-lock icon-left"></i>
-                                <input type="password" id="registerPassword" class="form-control login-input" placeholder="••••••••••••" required>
+                                <input type="password" id="registerPassword" class="form-control login-input" placeholder="Mínimo 6 caracteres" minlength="6" required>
                                 <i class="fa-solid fa-eye icon-right toggle-password" data-target="registerPassword"></i>
                             </div>
+                            <div class="error-message" id="errorPass"><i class="fa-solid fa-circle-exclamation me-1"></i> La contraseña debe tener al menos 6 caracteres.</div>
                         </div>
 
-                        <button type="submit" class="btn-cream mb-4">CREAR CUENTA</button>
+                        <button type="submit" id="btnCrearCuenta" class="btn-cream mb-4" style="opacity: 0.5; cursor: not-allowed;" disabled>CREAR CUENTA</button>
 
                         <div class="text-center small">
                             <span class="text-secondary">¿Ya tienes una cuenta?</span> 
@@ -145,6 +153,163 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- SCRIPT DE VALIDACIONES ESTRICTAS EN TIEMPO REAL -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Dominios de correo permitidos (Lista blanca)
+            const dominiosValidos = ['inara.com', 'gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'live.com'];
+
+            // ==========================================
+            // VALIDACIÓN DEL FORMULARIO DE REGISTRO
+            // ==========================================
+            const inputDni = document.getElementById('regDni');
+            const inputNombre = document.getElementById('regNombre');
+            const inputEmail = document.getElementById('regEmail');
+            const inputTelefono = document.getElementById('regTelefono');
+            const inputPass = document.getElementById('registerPassword');
+            const btnCrear = document.getElementById('btnCrearCuenta');
+
+            function validadorRegistro() {
+                let formValido = true;
+
+                // 1. Validar DNI (Exactamente 8 dígitos, solo números)
+                const regexDni = /^[0-9]{8}$/;
+                if (inputDni.value.length > 0 && !regexDni.test(inputDni.value)) {
+                    inputDni.classList.add('input-error');
+                    document.getElementById('errorDni').style.display = 'block';
+                    formValido = false;
+                } else {
+                    inputDni.classList.remove('input-error');
+                    document.getElementById('errorDni').style.display = 'none';
+                }
+                if (inputDni.value === '') formValido = false;
+
+                // 2. Validar Nombre (Solo letras y espacios)
+                const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+                if (inputNombre.value.length > 0 && (!regexNombre.test(inputNombre.value) || inputNombre.value.trim().length < 3)) {
+                    inputNombre.classList.add('input-error');
+                    document.getElementById('errorNombre').style.display = 'block';
+                    formValido = false;
+                } else {
+                    inputNombre.classList.remove('input-error');
+                    document.getElementById('errorNombre').style.display = 'none';
+                }
+                if (inputNombre.value === '') formValido = false;
+
+                // 3. Validar Correo Electrónico (Dominios Permitidos)
+                let esDominioValido = false;
+                const emailParts = inputEmail.value.split('@');
+                if (emailParts.length === 2) {
+                    esDominioValido = dominiosValidos.includes(emailParts[1].toLowerCase());
+                }
+                if (inputEmail.value.length > 0 && !esDominioValido) {
+                    inputEmail.classList.add('input-error');
+                    document.getElementById('errorEmail').style.display = 'block';
+                    formValido = false;
+                } else {
+                    inputEmail.classList.remove('input-error');
+                    document.getElementById('errorEmail').style.display = 'none';
+                }
+                if (inputEmail.value === '') formValido = false;
+
+                // 4. Validar Teléfono (Exactamente 9 dígitos, solo números)
+                const regexTelefono = /^[0-9]{9}$/;
+                if (inputTelefono.value.length > 0 && !regexTelefono.test(inputTelefono.value)) {
+                    inputTelefono.classList.add('input-error');
+                    document.getElementById('errorTelefono').style.display = 'block';
+                    formValido = false;
+                } else {
+                    inputTelefono.classList.remove('input-error');
+                    document.getElementById('errorTelefono').style.display = 'none';
+                }
+                if (inputTelefono.value === '') formValido = false;
+
+                // 5. Validar Contraseña (Mínimo 6 caracteres)
+                if (inputPass.value.length > 0 && inputPass.value.length < 6) {
+                    inputPass.classList.add('input-error');
+                    document.getElementById('errorPass').style.display = 'block';
+                    formValido = false;
+                } else {
+                    inputPass.classList.remove('input-error');
+                    document.getElementById('errorPass').style.display = 'none';
+                }
+                if (inputPass.value === '') formValido = false;
+
+                // Habilitar o deshabilitar botón de Registro
+                if (formValido) {
+                    btnCrear.disabled = false;
+                    btnCrear.style.opacity = '1';
+                    btnCrear.style.cursor = 'pointer';
+                } else {
+                    btnCrear.disabled = true;
+                    btnCrear.style.opacity = '0.5';
+                    btnCrear.style.cursor = 'not-allowed';
+                }
+            }
+
+            // Escuchar cambios en todos los inputs de registro
+            [inputDni, inputNombre, inputEmail, inputTelefono, inputPass].forEach(input => {
+                input.addEventListener('input', validadorRegistro);
+            });
+
+            // ==========================================
+            // VALIDACIÓN DEL FORMULARIO DE LOGIN
+            // ==========================================
+            const loginEmail = document.getElementById('loginEmail');
+            const loginPass = document.getElementById('loginPassword');
+            const btnLogin = document.getElementById('btnLoginSubmit');
+
+            function validadorLogin() {
+                let formLoginValido = true;
+
+                // 1. Validar Correo en Login (Dominios Permitidos)
+                let esDominioValidoLogin = false;
+                const emailPartsLogin = loginEmail.value.split('@');
+                if (emailPartsLogin.length === 2) {
+                    esDominioValidoLogin = dominiosValidos.includes(emailPartsLogin[1].toLowerCase());
+                }
+                if (loginEmail.value.length > 0 && !esDominioValidoLogin) {
+                    loginEmail.classList.add('input-error');
+                    document.getElementById('errorLoginEmail').style.display = 'block';
+                    formLoginValido = false;
+                } else {
+                    loginEmail.classList.remove('input-error');
+                    document.getElementById('errorLoginEmail').style.display = 'none';
+                }
+                if (loginEmail.value === '') formLoginValido = false;
+
+                // 2. Validar Contraseña en Login
+                if (loginPass.value.length > 0 && loginPass.value.length < 6) {
+                    loginPass.classList.add('input-error');
+                    document.getElementById('errorLoginPass').style.display = 'block';
+                    formLoginValido = false;
+                } else {
+                    loginPass.classList.remove('input-error');
+                    document.getElementById('errorLoginPass').style.display = 'none';
+                }
+                if (loginPass.value === '') formLoginValido = false;
+
+                // Habilitar o deshabilitar botón de Login
+                if (formLoginValido) {
+                    btnLogin.disabled = false;
+                    btnLogin.style.opacity = '1';
+                    btnLogin.style.cursor = 'pointer';
+                } else {
+                    btnLogin.disabled = true;
+                    btnLogin.style.opacity = '0.5';
+                    btnLogin.style.cursor = 'not-allowed';
+                }
+            }
+
+            // Escuchar cambios en inputs de login
+            [loginEmail, loginPass].forEach(input => {
+                input.addEventListener('input', validadorLogin);
+            });
+        });
+    </script>
+
     <script src="./js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./js/supabase.js"></script>
