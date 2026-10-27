@@ -8,8 +8,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Control de visibilidad de servicios -->
+    <style>
+        body.servicios-pendientes [data-servicio-id] {
+            display: none !important;
+        }
+
+        [data-servicio-id][hidden] {
+            display: none !important;
+        }
+    </style>
 </head>
-<body>
+<body class="servicios-pendientes">
     <div class="bg-dynamic-alt text-center py-2 fw-bold text-accent" style="font-size: 0.85rem; border-bottom: 1px solid var(--border-color);">
         35% de descuento en catering por tu primera reserva online
     </div>
@@ -75,88 +85,88 @@
 
             <div class="row g-4 text-start">
                 <!-- Servicio 1 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="1">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/matrimonio.jpg" class="card-img-top" alt="Bodas" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">01</span> Bodas de Ensueño</h5>
+                            <h5 class="mb-3">Bodas de Ensueño</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Celebraciones mágicas con un toque de sofisticación única y banquetes de alta etiqueta.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalBoda" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Servicio 2 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="2">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/quinceañera.jpg" class="card-img-top" alt="Quinceañeros" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">02</span> Quinceañeros</h5>
+                            <h5 class="mb-3">Quinceañeros</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Fiestas espectaculares y llenas de juventud, luces deslumbrantes y montajes temáticos.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuince" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Servicio 3 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="3">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/corporativo.jpg" class="card-img-top" alt="Corporativos" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">03</span> Corporativos</h5>
+                            <h5 class="mb-3">Corporativos</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Lanzamientos, cenas de gala y conferencias empresariales con el más alto estándar.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalCorp" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Servicio 4 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="4">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/tematica.jpg" class="card-img-top" alt="Temáticas" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">04</span> Fiestas Temáticas</h5>
+                            <h5 class="mb-3">Fiestas Temáticas</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Inmersión estética absoluta donde cada elemento responde a una fantasía exclusiva.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalTema" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Servicio 5 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="5">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/aniversario.jpg" class="card-img-top" alt="Aniversarios" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">05</span> Aniversarios</h5>
+                            <h5 class="mb-3">Aniversarios</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Renovamos votos y premiamos los años de trayectoria, amor y éxitos compartidos.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalAniv" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Servicio 6 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="6">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/bautizo.jpg" class="card-img-top" alt="Bautizos" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">06</span> Bautizos</h5>
+                            <h5 class="mb-3">Bautizos</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Celebraciones tiernas y llenas de luz para darle la bienvenida al nuevo integrante.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalBautizo" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Servicio 7 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="7">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/despedida.jpg" class="card-img-top" alt="Despedidas" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">07</span> Despedidas</h5>
+                            <h5 class="mb-3">Despedidas</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Despedidas de soltera elegantes y divertidas con coctelería premium y decoración chic.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDespedida" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Servicio 8 -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" data-servicio-id="8">
                     <div class="card-dynamic h-100">
                         <img src="./assets/img/comunion.jpg" class="card-img-top" alt="Comunión" style="height: 200px; object-fit: cover;">
                         <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="mb-3"><span class="text-accent me-2">08</span> Primera Comunión</h5>
+                            <h5 class="mb-3">Primera Comunión</h5>
                             <p class="mb-4" style="font-size: 0.9rem;">Mesas de postres angelicales, arreglos florales delicados y un ambiente de paz total.</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalComunion" class="text-accent text-decoration-none fw-bold mt-auto">Explorar Servicio <i class="fa-solid fa-arrow-right ms-1"></i></a>
                         </div>

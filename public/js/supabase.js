@@ -2,6 +2,56 @@ const supabaseUrl = 'https://kkkonlfsmdvquuhrresu.supabase.co';
 const supabaseKey = 'sb_publishable_S9LKSwIG3iOTXxHQc9J4rg_7Ok8-zcv';
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+
+// Control de visibilidad de servicios en la p?gina p?blica
+document.addEventListener('DOMContentLoaded', async () => {
+    const tarjetas = document.querySelectorAll('[data-servicio-id]');
+
+    if (!tarjetas.length) return;
+
+    const finalizarCarga = () => {
+        document.body.classList.remove('servicios-pendientes');
+    };
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('servicios')
+            .select('id, estado');
+
+        if (error) throw error;
+
+        const estados = new Map(
+            data.map(servicio => [
+                String(servicio.id),
+                servicio.estado
+            ])
+        );
+
+        tarjetas.forEach(tarjeta => {
+            const id = tarjeta.dataset.servicioId;
+            tarjeta.hidden = estados.get(id) !== 'activo';
+        });
+
+        finalizarCarga();
+
+    } catch (error) {
+        console.error('No se pudieron cargar los servicios:', error);
+
+        tarjetas.forEach(tarjeta => {
+            tarjeta.hidden = true;
+        });
+
+        finalizarCarga();
+
+        const contenedor = tarjetas[0].parentElement;
+        const aviso = document.createElement('p');
+        aviso.className = 'text-center text-secondary col-12';
+        aviso.textContent =
+            'No se pudieron cargar los servicios. Int?ntalo nuevamente m?s tarde.';
+        contenedor.appendChild(aviso);
+    }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
     
     // ==========================================
@@ -522,7 +572,7 @@ async function cargarServiciosAdmin() {
     tabla.innerHTML = '';
 
     if (window.listaServiciosGlobal.length === 0) {
-        tabla.innerHTML = '<tr><td colspan="4" class="text-center p-4">No hay servicios registrados.</td></tr>';
+        tabla.innerHTML = '<tr><td colspan="5" class="text-center p-4">No hay servicios registrados.</td></tr>';
         return;
     }
 
@@ -533,14 +583,91 @@ async function cargarServiciosAdmin() {
             <td class="p-4"><img src="${serv.imagen_url || './assets/img/matrimonio.jpg'}" class="rounded shadow-sm" style="width: 60px; height: 40px; object-fit: cover;"></td>
             <td class="p-4 fw-bold text-accent">${serv.nombre}</td>
             <td class="p-4">S/ ${parseFloat(serv.precio || 0).toFixed(2)}</td>
+            <td class="p-4">
+                <span class="badge ${serv.estado === 'activo' ? 'bg-success' : 'bg-secondary'}">
+                    ${serv.estado === 'activo' ? 'Activo' : 'Inactivo'}
+                </span>
+            </td>
             <td class="p-4 text-end">
                 <button class="btn btn-sm btn-outline-secondary me-2" onclick="prepararEdicion(${serv.id})" data-bs-toggle="modal" data-bs-target="#modalServicio"><i class="fa-solid fa-pen"></i></button>
+                <button
+                    class="btn btn-sm btn-outline-warning me-2"
+                    onclick="cambiarEstadoServicio(${serv.id})"
+                    title="${serv.estado === 'activo' ? 'Suspender servicio' : 'Reactivar servicio'}"
+                    aria-label="${serv.estado === 'activo' ? 'Suspender servicio' : 'Reactivar servicio'}">
+                    <i class="fa-solid ${serv.estado === 'activo' ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                </button>
                 <button class="btn btn-sm btn-outline-danger" onclick="eliminarServicio(${serv.id})"><i class="fa-solid fa-trash"></i></button>
             </td>
         `;
         tabla.appendChild(tr);
     });
 }
+
+
+window.cambiarEstadoServicio = async function(id) {
+    const servicio = window.listaServiciosGlobal.find(
+        s => String(s.id) === String(id)
+    );
+
+    if (!servicio) {
+        console.error('Servicio no encontrado:', id);
+        return;
+    }
+
+    const boton = Array.from(
+        document.querySelectorAll('#tablaServiciosBody button')
+    ).find(b => b.getAttribute('onclick') === `cambiarEstadoServicio(${id})`);
+
+    if (!boton || boton.disabled) return;
+
+    const nuevoEstado = servicio.estado === 'activo'
+        ? 'inactivo'
+        : 'activo';
+
+    boton.disabled = true;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('servicios')
+            .update({ estado: nuevoEstado })
+            .eq('id', id)
+            .select('id, estado')
+            .single();
+
+        if (error) throw error;
+
+        servicio.estado = data.estado;
+
+        const fila = boton.closest('tr');
+        const badge = fila.querySelector('span.badge');
+        const icono = boton.querySelector('i');
+
+        const activo = data.estado === 'activo';
+
+        badge.textContent = activo ? 'Activo' : 'Inactivo';
+        badge.classList.toggle('bg-success', activo);
+        badge.classList.toggle('bg-secondary', !activo);
+
+        icono.classList.toggle('fa-eye-slash', activo);
+        icono.classList.toggle('fa-eye', !activo);
+
+        const texto = activo
+            ? 'Suspender servicio'
+            : 'Reactivar servicio';
+
+        boton.title = texto;
+        boton.setAttribute('aria-label', texto);
+
+        console.log('Estado actualizado:', data.estado);
+
+    } catch (error) {
+        console.error('Error al actualizar el servicio:', error);
+        alert('No se pudo actualizar el estado del servicio.');
+    } finally {
+        boton.disabled = false;
+    }
+};
 
 window.prepararEdicion = function(id) {
     const servicio = window.listaServiciosGlobal.find(s => s.id === id);
