@@ -347,24 +347,77 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (formCrudServicio) {
         formCrudServicio.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const botonGuardarServicio = formCrudServicio.querySelector('button[type="submit"]');
+            if (botonGuardarServicio.disabled) return;
+
             const id = document.getElementById('idServicioInput').value;
-            const nombre = document.getElementById('nombreServInput').value;
-            const precio = parseFloat(document.getElementById('precioServInput').value);
-            const descripcion = document.getElementById('descServInput').value;
+            const nombre = document.getElementById('nombreServInput').value.trim();
+            const precio = Number(document.getElementById('precioServInput').value);
+            const descripcion = document.getElementById('descServInput').value.trim();
             const fileInput = document.getElementById('imgServInput');
             let imagen_url = document.getElementById('imgServOculto').value;
 
-            if (fileInput.files.length > 0) imagen_url = `./assets/img/${fileInput.files[0].name}`;
-            if (!imagen_url && !id) return alert('Selecciona una imagen.');
-
-            if (id) {
-                await supabaseClient.from('servicios').update({ nombre, precio, imagen_url, descripcion }).eq('id', id);
-            } else {
-                await supabaseClient.from('servicios').insert([{ nombre, precio, imagen_url, descripcion, estado: 'activo' }]);
+            if (!nombre || !descripcion || !Number.isFinite(precio) || precio < 0) {
+                alert('Verifica el nombre, precio y descripcion del servicio.');
+                return;
             }
-            
-            document.querySelector('#modalServicio .btn-close').click();
-            cargarServiciosAdmin();
+
+            // Se conserva el manejo de imagenes existente.
+            if (fileInput.files.length > 0) {
+                imagen_url = `./assets/img/${fileInput.files[0].name}`;
+            }
+
+            if (!imagen_url && !id) {
+                alert('Selecciona una imagen.');
+                return;
+            }
+
+            botonGuardarServicio.disabled = true;
+            const textoOriginal = botonGuardarServicio.textContent;
+            botonGuardarServicio.textContent = 'GUARDANDO...';
+
+            try {
+                let resultado;
+
+                if (id) {
+                    resultado = await supabaseClient
+                        .from('servicios')
+                        .update({ nombre, precio, imagen_url, descripcion })
+                        .eq('id', id)
+                        .select('id');
+                } else {
+                    resultado = await supabaseClient
+                        .from('servicios')
+                        .insert([{
+                            nombre,
+                            precio,
+                            imagen_url,
+                            descripcion,
+                            estado: 'activo'
+                        }])
+                        .select('id');
+                }
+
+                if (resultado.error) throw resultado.error;
+
+                if (!resultado.data || resultado.data.length !== 1) {
+                    throw new Error('No se confirmo el guardado de un unico servicio.');
+                }
+
+                await cargarServiciosAdmin();
+
+                const modalElemento = document.getElementById('modalServicio');
+                const modal = bootstrap.Modal.getOrCreateInstance(modalElemento);
+                modal.hide();
+
+            } catch (error) {
+                console.error('Error al guardar servicio:', error);
+                alert('No se pudo guardar el servicio. Revisa los datos e intenta nuevamente.');
+            } finally {
+                botonGuardarServicio.disabled = false;
+                botonGuardarServicio.textContent = textoOriginal;
+            }
         });
     }
 
