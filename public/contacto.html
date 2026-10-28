@@ -118,22 +118,27 @@
                         <form id="formContacto">
                             <div class="mb-4">
                                 <label class="form-label small fw-bold">NOMBRE COMPLETO</label>
-                                <input type="text" id="nombreInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" placeholder="Ingresa tu nombre" required>
+                                <input type="text" id="nombreInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" placeholder="Ingresa tu nombre y apellido" aria-describedby="errorNombreCotizacion" required>
+                                <div id="errorNombreCotizacion" class="small mt-1" style="color:#ff4d5a;display:none;" role="alert">
+                                    El nombre solo debe contener letras (mínimo 3 caracteres) y sin números.
+                                </div>
                             </div>
+
                             <div class="mb-4">
                                 <label class="form-label small fw-bold">CORREO ELECTRÓNICO</label>
                                 <input type="email" id="correoInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" placeholder="cliente@gmail.com" aria-describedby="errorCorreoCotizacion" required>
-<div id="errorCorreoCotizacion" class="small mt-1" style="color:#ff4d5a;display:none;" role="alert">
-    Ingresa un correo válido de Gmail, Hotmail, Outlook, Yahoo, Live o Inara.
-</div>
+                                <div id="errorCorreoCotizacion" class="small mt-1" style="color:#ff4d5a;display:none;" role="alert">
+                                    Ingresa un correo válido de Gmail, Hotmail, Outlook, Yahoo, Live o Inara.
+                                </div>
                             </div>
+
                             <div class="row mb-4">
                                 <div class="col-md-6 mb-4 mb-md-0">
                                     <label class="form-label small fw-bold">TELÉFONO</label>
-                                    <input type="tel" id="telefonoInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" placeholder="987654321" inputmode="numeric" maxlength="9" pattern="9[0-9]{8}" aria-describedby="errorTelefonoCotizacion" required>
-<div id="errorTelefonoCotizacion" class="small mt-1" style="color:#ff4d5a;display:none;" role="alert">
-    El teléfono debe comenzar con 9 y tener exactamente 9 dígitos.
-</div>
+                                    <input type="tel" id="telefonoInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" placeholder="987654321" inputmode="numeric" maxlength="9" aria-describedby="errorTelefonoCotizacion" required>
+                                    <div id="errorTelefonoCotizacion" class="small mt-1" style="color:#ff4d5a;display:none;" role="alert">
+                                        El teléfono debe comenzar con 9 y tener exactamente 9 dígitos.
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold">TIPO DE EVENTO</label>
@@ -150,16 +155,21 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="row mb-4">
                                 <div class="col-md-6 mb-4 mb-md-0">
                                     <label class="form-label small fw-bold">FECHA TENTATIVA</label>
-                                    <input type="date" id="fechaInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" required>
+                                    <input type="date" id="fechaInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" aria-describedby="errorFechaCotizacion" required>
+                                    <div id="errorFechaCotizacion" class="small mt-1" style="color:#ff4d5a;display:none;" role="alert">
+                                        Selecciona una fecha válida a partir del día de hoy.
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold">CANTIDAD INVITADOS</label>
                                     <input type="number" id="invitadosInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" placeholder="Ej. 100" min="1" required>
                                 </div>
                             </div>
+
                             <div class="mb-4">
                                 <label class="form-label small fw-bold">DETALLES DEL EVENTO</label>
                                 <textarea id="detallesInput" class="form-control rounded-3 py-2 bg-dynamic-alt border-0 text-secondary" rows="4" placeholder="Cuéntanos un poco más: tu visión, colores..." required></textarea>
@@ -212,89 +222,108 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/supabase.js"></script>
-<script id="validacion-telefono-cotizacion">
-document.addEventListener('DOMContentLoaded', () => {
-    const telefono = document.getElementById('telefonoInput');
-    const error = document.getElementById('errorTelefonoCotizacion');
-    const formulario = document.getElementById('formContacto');
 
-    if (!telefono || !error || !formulario) return;
+    <!-- SCRIPTS DE VALIDACIÓN EN TIEMPO REAL -->
+    <script id="validaciones-contacto">
+    document.addEventListener('DOMContentLoaded', () => {
+        const formulario = document.getElementById('formContacto');
 
-    function validarTelefono() {
-        const valor = telefono.value.trim();
-        const valido = /^9[0-9]{8}$/.test(valor);
-        const mostrarError = valor.length > 0 && !valido;
+        // 1. VALIDACIÓN NOMBRE COMPLETO
+        const inputNombre = document.getElementById('nombreInput');
+        const errorNombre = document.getElementById('errorNombreCotizacion');
+        function validarNombre() {
+            const valor = inputNombre.value.trim();
+            const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,60}$/;
+            const esValido = regexNombre.test(valor);
+            const mostrarError = valor.length > 0 && !esValido;
 
-        error.style.display = mostrarError ? 'block' : 'none';
-        telefono.style.border = mostrarError
-            ? '1px solid #ff4d5a'
-            : '';
-
-        telefono.setAttribute('aria-invalid', mostrarError ? 'true' : 'false');
-
-        return valido;
-    }
-
-    telefono.addEventListener('input', validarTelefono);
-    telefono.addEventListener('blur', validarTelefono);
-
-    formulario.addEventListener('submit', (evento) => {
-        if (!validarTelefono()) {
-            evento.preventDefault();
-            evento.stopImmediatePropagation();
-            error.style.display = 'block';
-            telefono.focus();
+            errorNombre.style.display = mostrarError ? 'block' : 'none';
+            inputNombre.style.border = mostrarError ? '1px solid #ff4d5a' : '';
+            inputNombre.setAttribute('aria-invalid', mostrarError ? 'true' : 'false');
+            return esValido;
         }
-    }, true);
-});
-</script>
-<script id="validacion-correo-cotizacion">
-document.addEventListener('DOMContentLoaded', () => {
-    const correo = document.getElementById('correoInput');
-    const error = document.getElementById('errorCorreoCotizacion');
-    const formulario = document.getElementById('formContacto');
+        inputNombre.addEventListener('input', validarNombre);
+        inputNombre.addEventListener('blur', validarNombre);
 
-    if (!correo || !error || !formulario) return;
+        // 2. VALIDACIÓN CORREO
+        const inputCorreo = document.getElementById('correoInput');
+        const errorCorreo = document.getElementById('errorCorreoCotizacion');
+        const dominiosValidos = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'live.com', 'inara.com'];
+        function validarCorreo() {
+            const valor = inputCorreo.value.trim().toLowerCase();
+            const formatoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+            const dominio = valor.split('@')[1];
+            const esValido = formatoValido && dominiosValidos.includes(dominio);
+            const mostrarError = valor.length > 0 && !esValido;
 
-    const dominiosValidos = [
-        'gmail.com',
-        'hotmail.com',
-        'outlook.com',
-        'yahoo.com',
-        'live.com',
-        'inara.com'
-    ];
-
-    function validarCorreo() {
-        const valor = correo.value.trim().toLowerCase();
-        const formatoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
-        const dominio = valor.split('@')[1];
-        const valido = formatoValido && dominiosValidos.includes(dominio);
-        const mostrarError = valor.length > 0 && !valido;
-
-        error.style.display = mostrarError ? 'block' : 'none';
-
-        correo.style.border = mostrarError
-            ? '1px solid #ff4d5a'
-            : '';
-
-        correo.setAttribute('aria-invalid', mostrarError ? 'true' : 'false');
-
-        return valido;
-    }
-
-    correo.addEventListener('input', validarCorreo);
-    correo.addEventListener('blur', validarCorreo);
-
-    formulario.addEventListener('submit', (evento) => {
-        if (!validarCorreo()) {
-            evento.preventDefault();
-            evento.stopImmediatePropagation();
-            error.style.display = 'block';
-            correo.focus();
+            errorCorreo.style.display = mostrarError ? 'block' : 'none';
+            inputCorreo.style.border = mostrarError ? '1px solid #ff4d5a' : '';
+            inputCorreo.setAttribute('aria-invalid', mostrarError ? 'true' : 'false');
+            return esValido;
         }
-    }, true);
-});
-</script>
+        inputCorreo.addEventListener('input', validarCorreo);
+        inputCorreo.addEventListener('blur', validarCorreo);
+
+        // 3. VALIDACIÓN TELÉFONO
+        const inputTelefono = document.getElementById('telefonoInput');
+        const errorTelefono = document.getElementById('errorTelefonoCotizacion');
+        function validarTelefono() {
+            const valor = inputTelefono.value.trim();
+            const esValido = /^9[0-9]{8}$/.test(valor);
+            const mostrarError = valor.length > 0 && !esValido;
+
+            errorTelefono.style.display = mostrarError ? 'block' : 'none';
+            inputTelefono.style.border = mostrarError ? '1px solid #ff4d5a' : '';
+            inputTelefono.setAttribute('aria-invalid', mostrarError ? 'true' : 'false');
+            return esValido;
+        }
+        inputTelefono.addEventListener('input', validarTelefono);
+        inputTelefono.addEventListener('blur', validarTelefono);
+
+        // 4. VALIDACIÓN FECHA TENTATIVA (NO PASADA / AÑO VÁLIDO)
+        const inputFecha = document.getElementById('fechaInput');
+        const errorFecha = document.getElementById('errorFechaCotizacion');
+        function validarFecha() {
+            const valor = inputFecha.value.trim();
+            if (!valor) return false;
+
+            const partes = valor.split('-');
+            const anio = parseInt(partes[0], 10);
+            const fechaIngresada = new Date(valor + 'T00:00:00');
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+
+            // Debe ser fecha existente, año coherente (mínimo el año actual) y no anterior a hoy
+            const esValido = !isNaN(fechaIngresada.getTime()) && anio >= hoy.getFullYear() && fechaIngresada >= hoy;
+            const mostrarError = valor.length > 0 && !esValido;
+
+            errorFecha.style.display = mostrarError ? 'block' : 'none';
+            inputFecha.style.border = mostrarError ? '1px solid #ff4d5a' : '';
+            inputFecha.setAttribute('aria-invalid', mostrarError ? 'true' : 'false');
+            return esValido;
+        }
+        inputFecha.addEventListener('input', validarFecha);
+        inputFecha.addEventListener('change', validarFecha);
+        inputFecha.addEventListener('blur', validarFecha);
+
+        // BLOQUEO EN SUBMIT SI ALGUNO ES INVÁLIDO
+        formulario.addEventListener('submit', (evento) => {
+            const vNombre = validarNombre();
+            const vCorreo = validarCorreo();
+            const vTel = validarTelefono();
+            const vFecha = validarFecha();
+
+            if (!vNombre || !vCorreo || !vTel || !vFecha) {
+                evento.preventDefault();
+                evento.stopImmediatePropagation();
+
+                if (!vNombre) { errorNombre.style.display = 'block'; inputNombre.focus(); }
+                else if (!vCorreo) { errorCorreo.style.display = 'block'; inputCorreo.focus(); }
+                else if (!vTel) { errorTelefono.style.display = 'block'; inputTelefono.focus(); }
+                else if (!vFecha) { errorFecha.style.display = 'block'; inputFecha.focus(); }
+            }
+        }, true);
+    });
+    </script>
 </body>
 </html>

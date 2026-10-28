@@ -2,53 +2,134 @@ const supabaseUrl = 'https://kkkonlfsmdvquuhrresu.supabase.co';
 const supabaseKey = 'sb_publishable_S9LKSwIG3iOTXxHQc9J4rg_7Ok8-zcv';
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+// ==========================================================================
+// SISTEMA DE MODALES ELEGANTES INARA (UX & FEEDBACK NAYHA)
+// ==========================================================================
 
-// Control de visibilidad de servicios en la p?gina p?blica
+function asegurarModalesEnDOM() {
+    if (!document.getElementById('modalFeedback')) {
+        const modalHtml = `
+        <div class="modal fade" id="modalFeedback" tabindex="-1" aria-hidden="true" style="z-index: 1090;">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 text-center p-4 shadow-lg modal-inara-feedback">
+                    <div class="modal-body p-0">
+                        <div id="feedbackIconContainer" class="mb-3 d-flex justify-content-center"></div>
+                        <h5 class="fw-bold mb-2" id="feedbackTitulo">Mensaje</h5>
+                        <p class="text-secondary small mb-4" id="feedbackMensaje"></p>
+                        <button type="button" class="btn-main w-100 py-2 rounded-pill" data-bs-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-hidden="true" style="z-index: 1090;">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 text-center p-4 shadow-lg modal-inara-feedback">
+                    <div class="modal-body p-0">
+                        <div class="mx-auto mb-3 border border-warning border-2 rounded-circle d-flex align-items-center justify-content-center feedback-icon-badge badge-warning">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-accent" id="confirmTitulo">¿Estás seguro?</h5>
+                        <p class="text-secondary small mb-4" id="confirmMensaje">Esta acción no se puede deshacer.</p>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-secondary w-50 py-2 rounded-pill small" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" id="btnConfirmarAccion" class="btn btn-danger w-50 py-2 rounded-pill small">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+}
+
+window.mostrarFeedback = function(tipo, titulo, mensaje) {
+    asegurarModalesEnDOM();
+    const modalEl = document.getElementById('modalFeedback');
+    const iconContainer = document.getElementById('feedbackIconContainer');
+    const tituloEl = document.getElementById('feedbackTitulo');
+    const mensajeEl = document.getElementById('feedbackMensaje');
+
+    tituloEl.innerText = titulo;
+    mensajeEl.innerHTML = mensaje.replace(/\n/g, '<br>');
+
+    if (tipo === 'exito') {
+        iconContainer.innerHTML = `
+            <div class="mx-auto border border-success border-2 rounded-circle d-flex align-items-center justify-content-center feedback-icon-badge badge-success">
+                <i class="fa-solid fa-check"></i>
+            </div>`;
+        tituloEl.className = 'fw-bold mb-2 text-success';
+    } else if (tipo === 'advertencia') {
+        iconContainer.innerHTML = `
+            <div class="mx-auto border border-warning border-2 rounded-circle d-flex align-items-center justify-content-center feedback-icon-badge badge-warning">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>`;
+        tituloEl.className = 'fw-bold mb-2 text-warning';
+    } else {
+        iconContainer.innerHTML = `
+            <div class="mx-auto border border-danger border-2 rounded-circle d-flex align-items-center justify-content-center feedback-icon-badge badge-danger">
+                <i class="fa-solid fa-xmark"></i>
+            </div>`;
+        tituloEl.className = 'fw-bold mb-2 text-danger';
+    }
+
+    const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modalInstance.show();
+};
+
+window.confirmarAccionModal = function(titulo, mensaje, onConfirmar) {
+    asegurarModalesEnDOM();
+    const modalEl = document.getElementById('modalConfirmacion');
+    document.getElementById('confirmTitulo').innerText = titulo;
+    document.getElementById('confirmMensaje').innerText = mensaje;
+    
+    const btnConfirmar = document.getElementById('btnConfirmarAccion');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    
+    const nuevoBtn = btnConfirmar.cloneNode(true);
+    btnConfirmar.parentNode.replaceChild(nuevoBtn, btnConfirmar);
+
+    nuevoBtn.addEventListener('click', async () => {
+        modalInstance.hide();
+        await onConfirmar();
+    });
+
+    modalInstance.show();
+};
+
+// ==========================================================================
+// CONTROL DE VISIBILIDAD DE SERVICIOS EN CATÁLOGO & RESTRICCIÓN DE FECHAS
+// ==========================================================================
 document.addEventListener('DOMContentLoaded', async () => {
+    asegurarModalesEnDOM();
+
+    // Restricción automática de fecha mínima al día de hoy
+    const fechaInput = document.getElementById('fechaInput');
+    if (fechaInput) {
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        fechaInput.setAttribute('min', `${yyyy}-${mm}-${dd}`);
+    }
+
     const tarjetas = document.querySelectorAll('[data-servicio-id]');
+    if (tarjetas.length) {
+        try {
+            const { data, error } = await supabaseClient.from('servicios').select('id, estado');
+            if (error) throw error;
 
-    if (!tarjetas.length) return;
-
-    const finalizarCarga = () => {
-        document.body.classList.remove('servicios-pendientes');
-    };
-
-    try {
-        const { data, error } = await supabaseClient
-            .from('servicios')
-            .select('id, estado');
-
-        if (error) throw error;
-
-        const estados = new Map(
-            data.map(servicio => [
-                String(servicio.id),
-                servicio.estado
-            ])
-        );
-
-        tarjetas.forEach(tarjeta => {
-            const id = tarjeta.dataset.servicioId;
-            tarjeta.hidden = estados.get(id) !== 'activo';
-        });
-
-        finalizarCarga();
-
-    } catch (error) {
-        console.error('No se pudieron cargar los servicios:', error);
-
-        tarjetas.forEach(tarjeta => {
-            tarjeta.hidden = true;
-        });
-
-        finalizarCarga();
-
-        const contenedor = tarjetas[0].parentElement;
-        const aviso = document.createElement('p');
-        aviso.className = 'text-center text-secondary col-12';
-        aviso.textContent =
-            'No se pudieron cargar los servicios. Int?ntalo nuevamente m?s tarde.';
-        contenedor.appendChild(aviso);
+            const estados = new Map(data.map(servicio => [String(servicio.id), servicio.estado]));
+            tarjetas.forEach(tarjeta => {
+                const id = tarjeta.dataset.servicioId;
+                tarjeta.hidden = estados.get(id) !== 'activo';
+            });
+            document.body.classList.remove('servicios-pendientes');
+        } catch (error) {
+            console.error('No se pudieron cargar los servicios:', error);
+            tarjetas.forEach(tarjeta => tarjeta.hidden = true);
+            document.body.classList.remove('servicios-pendientes');
+        }
     }
 });
 
@@ -63,8 +144,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const { data: { session } } = await supabaseClient.auth.getSession();
         
         if (!session) {
-            alert('El enlace de recuperación ha expirado o es inválido.');
-            window.location.href = 'login.html';
+            mostrarFeedback('error', 'Enlace Inválido', 'El enlace de recuperación ha expirado o no es válido.');
+            setTimeout(() => { window.location.href = 'login.html'; }, 2200);
             return;
         }
 
@@ -76,11 +157,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 const { error } = await supabaseClient.auth.updateUser({ password: nuevaPass });
                 if (!error) {
-                    alert('¡Contraseña actualizada con éxito! Por favor, inicia sesión de nuevo.');
+                    mostrarFeedback('exito', 'Contraseña Actualizada', 'Tu contraseña se cambió con éxito. Inicia sesión nuevamente.');
                     await supabaseClient.auth.signOut();
-                    window.location.href = 'login.html';
+                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
                 } else {
-                    alert('Hubo un error al actualizar la contraseña: ' + error.message);
+                    mostrarFeedback('error', 'Error al Actualizar', error.message);
                 }
             });
         }
@@ -94,7 +175,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (session && session.user) {
         const emailNormalizado = session.user.email.trim().toLowerCase();
 
-        // Usamos .maybeSingle() para evitar el error 406 en consola
         const { data: adminData } = await supabaseClient
             .from('administradores')
             .select('*')
@@ -118,29 +198,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Reglas de redirección de seguridad
     if (session && profile) {
-        if (currentPage === 'login.html') {
-            window.location.href = userRole === 'admin' ? 'dashboard.html' : 'index.html';
-            return;
-        }
-        if (currentPage === 'dashboard.html' && userRole !== 'admin') {
-            window.location.href = 'index.html';
-            return;
-        }
+        if (currentPage === 'login.html') return window.location.href = userRole === 'admin' ? 'dashboard.html' : 'index.html';
+        if (currentPage === 'dashboard.html' && userRole !== 'admin') return window.location.href = 'index.html';
     } else {
-        if (currentPage === 'dashboard.html') {
-            window.location.href = 'login.html';
-            return;
-        }
+        if (currentPage === 'dashboard.html') return window.location.href = 'login.html';
     }
 
-    // Actualización visual del Navbar ("Hola, Nombre" / Cerrar Sesión)
     const authContainers = document.querySelectorAll('.auth-container');
     authContainers.forEach(container => {
         if (session && profile) {
             const primerNombre = profile.nombre_completo ? profile.nombre_completo.split(' ')[0] : 'Usuario';
-            
             const btnDashboard = userRole === 'admin' 
                 ? `<a href="dashboard.html" class="nav-icon-btn ms-1" title="Ir al Dashboard" style="color: var(--accent); text-decoration: none;"><i class="fa-solid fa-chart-line"></i></a>` 
                 : '';
@@ -152,8 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <button class="nav-icon-btn btn-logout" title="Cerrar Sesión" style="background: none; border: none; padding: 0; cursor: pointer;">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
-                </div>
-            `;
+                </div>`;
         }
     });
 
@@ -167,7 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // ==========================================
-    // 2. RECUPERACIÓN DE CONTRASEÑA
+    // 2. RECUPERAR CONTRASEÑA
     // ==========================================
     const formRecuperarPass = document.getElementById('formRecuperarPass');
     if (formRecuperarPass) {
@@ -179,17 +246,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
 
             if (error) {
-                alert('Error al enviar el enlace. Verifica que el correo esté registrado.');
+                mostrarFeedback('error', 'Correo no Registrado', 'Verifica que el correo electrónico ingresado sea el correcto.');
             } else {
-                alert('¡Enlace enviado! Revisa tu bandeja de entrada o carpeta de SPAM.');
-                document.querySelector('#modalRecuperar .btn-close').click();
+                mostrarFeedback('exito', 'Enlace Enviado', 'Revisa tu bandeja de entrada o spam para restablecer tu contraseña.');
+                const btnCerrar = document.querySelector('#modalRecuperar .btn-close');
+                if (btnCerrar) btnCerrar.click();
                 formRecuperarPass.reset();
             }
         });
     }
 
     // ==========================================
-    // 3. INICIO DE SESIÓN CON PESTAÑAS SEPARADAS
+    // 3. INICIO DE SESIÓN CON MODALES
     // ==========================================
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
@@ -199,14 +267,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const btnActivo = document.querySelector('.role-btn.active');
             const tabActiva = btnActivo ? btnActivo.getAttribute('data-role') : 'cliente';
             
-            const email = loginForm.querySelector('input[type="email"]').value.trim().toLowerCase();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
             const password = document.getElementById('loginPassword').value;
             
-            // 1. Validar credenciales en Supabase Auth
             const { error: authError } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (authError) return alert('Credenciales incorrectas o usuario no registrado.');
+            if (authError) {
+                return mostrarFeedback('error', 'Credenciales Incorrectas', 'El correo o la contraseña son incorrectos. Inténtalo de nuevo.');
+            }
             
-            // 2. Verificar existencia en tablas separadas
             const { data: adminRecord } = await supabaseClient
                 .from('administradores')
                 .select('id')
@@ -221,24 +289,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (!adminRecord && !clientRecord) {
                 await supabaseClient.auth.signOut();
-                return alert('Tu cuenta no tiene un perfil asociado en el sistema. Contacta al soporte.');
+                return mostrarFeedback('error', 'Cuenta Sin Perfil', 'No se encontró un perfil activo vinculado a estas credenciales.');
             }
 
             const rolReal = adminRecord ? 'admin' : 'cliente';
 
-            // 3. Validación estricta según la pestaña del Login
             if (tabActiva !== rolReal) {
                 await supabaseClient.auth.signOut(); 
-                return alert(`⚠️ ACCESO DENEGADO.\n\nEstás intentando ingresar desde la pestaña de ${tabActiva.toUpperCase()},\npero tu cuenta está registrada como ${rolReal.toUpperCase()}.\n\nPor favor, cambia a la pestaña correcta.`);
+                return mostrarFeedback('advertencia', 'Acceso Denegado', 
+                    `Estás intentando ingresar desde la pestaña de <strong>${tabActiva.toUpperCase()}</strong>, pero tu cuenta pertenece al rol de <strong>${rolReal.toUpperCase()}</strong>.<br><br>Por favor, cambia de pestaña para iniciar sesión.`);
             }
 
-            // 4. Redirección según rol
             window.location.href = rolReal === 'admin' ? 'dashboard.html' : 'index.html';
         });
     }
 
     // ==========================================
-    // 4. REGISTRO EXCLUSIVO DE CLIENTES
+    // 4. REGISTRO DE CLIENTES CON MODALES
     // ==========================================
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
@@ -256,16 +323,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const telefono = document.getElementById('regTelefono').value.trim();
                 const password = document.getElementById('registerPassword').value;
 
-                // 1. Crear en Auth
-                const { data: authData, error: authError } = await supabaseClient.auth.signUp({ email, password });
-
-                if (authError) return alert('Error al crear la cuenta: ' + authError.message);
-
-                if (authData.user && authData.user.identities && authData.user.identities.length === 0) {
-                    return alert('Este correo ya se encuentra registrado. Intenta iniciar sesión.');
+                // Validación de seguridad para teléfono (inicia con 9 y tiene 9 dígitos)
+                if (!/^9[0-9]{8}$/.test(telefono)) {
+                    return mostrarFeedback('advertencia', 'Teléfono Inválido', 'El número de teléfono debe comenzar con 9 y contener 9 dígitos numéricos.');
                 }
 
-                // 2. Insertar en la tabla clientes
+                const { data: authData, error: authError } = await supabaseClient.auth.signUp({ email, password });
+
+                if (authError) return mostrarFeedback('error', 'Error al Registrar', authError.message);
+
+                if (authData.user && authData.user.identities && authData.user.identities.length === 0) {
+                    return mostrarFeedback('advertencia', 'Correo en Uso', 'Este correo ya se encuentra registrado. Por favor, inicia sesión.');
+                }
+
                 if (authData.user) {
                     const { error: insertError } = await supabaseClient.from('clientes').insert([
                         { dni: dni, nombre_completo: nombre, correo: email, telefono: telefono }
@@ -273,13 +343,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     if (insertError) {
                         if (insertError.message.includes('duplicate key') || insertError.code === '23505') {
-                            alert('El DNI o Correo ya está registrado en la base de datos.');
+                            mostrarFeedback('error', 'Datos Duplicados', 'El DNI o Correo ingresado ya existe en nuestra base de datos.');
                         } else {
-                            alert('Error al registrar perfil: ' + insertError.message);
+                            mostrarFeedback('error', 'Error en Perfil', insertError.message);
                         }
                     } else {
                         await supabaseClient.auth.signOut(); 
-                        alert('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión como Cliente.');
+                        mostrarFeedback('exito', '¡Cuenta Creada!', 'Tu cuenta ha sido creada exitosamente. Ya puedes iniciar sesión.');
                         document.getElementById('btnSwitchToLogin').click();
                         registerForm.reset();
                     }
@@ -294,22 +364,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // ==========================================
-    // 5. FORMULARIO DE RESERVAS (CONTACTO)
+    // 5. CONTACTO & RESERVAS CON VALIDACIÓN DE FECHA
     // ==========================================
     const formContacto = document.getElementById('formContacto');
     if (formContacto) {
         formContacto.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const nombre = document.getElementById('nombreInput') ? document.getElementById('nombreInput').value : 'Cliente';
+            const nombre = document.getElementById('nombreInput') ? document.getElementById('nombreInput').value.trim() : 'Cliente';
             const correo = document.getElementById('correoInput') ? document.getElementById('correoInput').value.trim().toLowerCase() : '';
-            const telefono = document.getElementById('telefonoInput') ? document.getElementById('telefonoInput').value : '';
+            const telefono = document.getElementById('telefonoInput') ? document.getElementById('telefonoInput').value.trim() : '';
             const selectEvento = document.getElementById('tipoEvento');
             const tipoEvento = selectEvento ? selectEvento.options[selectEvento.selectedIndex].text : 'General';
             const fecha = document.getElementById('fechaInput') ? document.getElementById('fechaInput').value : null;
             const invitados = document.getElementById('invitadosInput') ? parseInt(document.getElementById('invitadosInput').value) : null;
-            const detalles = document.getElementById('detallesInput') ? document.getElementById('detallesInput').value : '';
+            const detalles = document.getElementById('detallesInput') ? document.getElementById('detallesInput').value.trim() : '';
 
-            // Vinculación con el ID numérico de clientes
+            // Bloqueo estricto de fechas pasadas
+            if (fecha) {
+                const fechaSeleccionada = new Date(fecha + 'T00:00:00');
+                const hoy = new Date();
+                hoy.setHours(0, 0, 0, 0);
+
+                if (fechaSeleccionada < hoy) {
+                    return mostrarFeedback('advertencia', 'Fecha Inválida', 'No puedes reservar para una fecha pasada. Selecciona una fecha a partir de hoy.');
+                }
+            }
+
+            // Validación estricta de teléfono en el envío
+            if (!/^9[0-9]{8}$/.test(telefono)) {
+                return mostrarFeedback('advertencia', 'Teléfono Inválido', 'El número de teléfono debe iniciar con 9 y contener 9 dígitos.');
+            }
+
             const clienteIdInsert = (userRole === 'cliente' && profile) ? profile.id : null;
 
             const { error: insertError } = await supabaseClient.from('reservas').insert([{ 
@@ -321,16 +406,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 estado: 'Pendiente' 
             }]);
 
-            if (insertError) return alert('Hubo un error al guardar la reserva: ' + insertError.message);
+            if (insertError) {
+                return mostrarFeedback('error', 'Error en Reserva', 'No se pudo registrar la solicitud: ' + insertError.message);
+            }
             
             const numeroWhatsApp = '51937220742'; 
-            const mensaje = `¡Hola INARA! Soy ${nombre}. Deseo cotizar un evento de tipo: *${tipoEvento}*.%0A%0A*Fecha:* ${fecha || 'A coordinar'}%0A*Invitados:* ${invitados || 'A coordinar'}%0A*Detalles:* ${detalles}%0A*Mi teléfono:* ${telefono}%0A*Mi correo:* ${correo}`;
+            const mensaje = `¡Hola INARA! Soy ${nombre}. Deseo cotizar un evento de tipo: *${tipoEvento}*.%0A%0A*Fecha:* ${fecha || 'Por coordinar'}%0A*Invitados:* ${invitados || 'Por coordinar'}%0A*Detalles:* ${detalles}%0A*Mi teléfono:* ${telefono}%0A*Mi correo:* ${correo}`;
             window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`, '_blank');
             formContacto.reset();
         });
     }
 
-    // Inicializar tablas si estamos en el dashboard
     const tablaReservasBody = document.getElementById('tablaReservasBody');
     if (tablaReservasBody) {
         cargarServiciosAdmin();
@@ -341,15 +427,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // ==========================================
-    // 6. CRUD SERVICIOS
+    // 6. CRUD SERVICIOS (DAVID & NAYHA)
     // ==========================================
     const formCrudServicio = document.getElementById('formCrudServicio');
     if (formCrudServicio) {
         formCrudServicio.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            const botonGuardarServicio = formCrudServicio.querySelector('button[type="submit"]');
-            if (botonGuardarServicio.disabled) return;
+            const botonGuardar = formCrudServicio.querySelector('button[type="submit"]');
+            if (botonGuardar.disabled) return;
 
             const id = document.getElementById('idServicioInput').value;
             const nombre = document.getElementById('nombreServInput').value.trim();
@@ -359,64 +444,46 @@ document.addEventListener('DOMContentLoaded', async () => {
             let imagen_url = document.getElementById('imgServOculto').value;
 
             if (!nombre || !descripcion || !Number.isFinite(precio) || precio < 0) {
-                alert('Verifica el nombre, precio y descripcion del servicio.');
-                return;
+                return mostrarFeedback('advertencia', 'Datos Incompletos', 'Verifica el nombre, precio y descripción del servicio.');
             }
 
-            // Se conserva el manejo de imagenes existente.
             if (fileInput.files.length > 0) {
                 imagen_url = `./assets/img/${fileInput.files[0].name}`;
             }
 
             if (!imagen_url && !id) {
-                alert('Selecciona una imagen.');
-                return;
+                return mostrarFeedback('advertencia', 'Imagen Requerida', 'Por favor selecciona una imagen para el servicio.');
             }
 
-            botonGuardarServicio.disabled = true;
-            const textoOriginal = botonGuardarServicio.textContent;
-            botonGuardarServicio.textContent = 'GUARDANDO...';
+            botonGuardar.disabled = true;
+            const textoOriginal = botonGuardar.textContent;
+            botonGuardar.textContent = 'GUARDANDO...';
 
             try {
                 let resultado;
-
                 if (id) {
-                    resultado = await supabaseClient
-                        .from('servicios')
+                    resultado = await supabaseClient.from('servicios')
                         .update({ nombre, precio, imagen_url, descripcion })
                         .eq('id', id)
                         .select('id');
                 } else {
-                    resultado = await supabaseClient
-                        .from('servicios')
-                        .insert([{
-                            nombre,
-                            precio,
-                            imagen_url,
-                            descripcion,
-                            estado: 'activo'
-                        }])
+                    resultado = await supabaseClient.from('servicios')
+                        .insert([{ nombre, precio, imagen_url, descripcion, estado: 'activo' }])
                         .select('id');
                 }
 
                 if (resultado.error) throw resultado.error;
 
-                if (!resultado.data || resultado.data.length !== 1) {
-                    throw new Error('No se confirmo el guardado de un unico servicio.');
-                }
-
                 await cargarServiciosAdmin();
-
-                const modalElemento = document.getElementById('modalServicio');
-                const modal = bootstrap.Modal.getOrCreateInstance(modalElemento);
+                const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalServicio'));
                 modal.hide();
-
+                mostrarFeedback('exito', 'Servicio Guardado', id ? 'Servicio actualizado correctamente.' : 'Nuevo servicio registrado con éxito.');
             } catch (error) {
-                console.error('Error al guardar servicio:', error);
-                alert('No se pudo guardar el servicio. Revisa los datos e intenta nuevamente.');
+                console.error(error);
+                mostrarFeedback('error', 'Error al Guardar', 'No se pudo guardar el servicio. Intenta nuevamente.');
             } finally {
-                botonGuardarServicio.disabled = false;
-                botonGuardarServicio.textContent = textoOriginal;
+                botonGuardar.disabled = false;
+                botonGuardar.textContent = textoOriginal;
             }
         });
     }
@@ -429,18 +496,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         formCrudExtra.addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('idExtraInput').value;
-            const nombre = document.getElementById('nombreExtraInput').value;
+            const nombre = document.getElementById('nombreExtraInput').value.trim();
             const precio = parseFloat(document.getElementById('precioExtraInput').value);
-            const descripcion = document.getElementById('descExtraInput').value;
+            const descripcion = document.getElementById('descExtraInput').value.trim();
 
+            let resError = null;
             if (id) {
-                await supabaseClient.from('extras').update({ nombre, precio_unitario: precio, descripcion }).eq('id', id);
+                const { error } = await supabaseClient.from('extras').update({ nombre, precio_unitario: precio, descripcion }).eq('id', id);
+                resError = error;
             } else {
-                await supabaseClient.from('extras').insert([{ nombre, precio_unitario: precio, descripcion }]);
+                const { error } = await supabaseClient.from('extras').insert([{ nombre, precio_unitario: precio, descripcion }]);
+                resError = error;
             }
             
-            document.querySelector('#modalExtra .btn-close').click();
-            cargarExtrasAdmin();
+            if (!resError) {
+                document.querySelector('#modalExtra .btn-close').click();
+                mostrarFeedback('exito', 'Extra Guardado', id ? 'Extra actualizado correctamente.' : 'Nuevo extra registrado.');
+                cargarExtrasAdmin();
+            } else {
+                mostrarFeedback('error', 'Error al Guardar', resError.message);
+            }
         });
     }
 
@@ -452,24 +527,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         formCrudProveedor.addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('idProveedorInput').value;
-            const empresa = document.getElementById('empresaProvInput').value;
-            const contacto = document.getElementById('contactoProvInput').value;
-            const telefono = document.getElementById('telefonoProvInput').value;
-            const especialidad = document.getElementById('especialidadProvInput').value;
+            const empresa = document.getElementById('empresaProvInput').value.trim();
+            const contacto = document.getElementById('contactoProvInput').value.trim();
+            const telefono = document.getElementById('telefonoProvInput').value.trim();
+            const especialidad = document.getElementById('especialidadProvInput').value.trim();
 
+            let resError = null;
             if (id) {
-                await supabaseClient.from('proveedores').update({ nombre_empresa: empresa, contacto, telefono, especialidad }).eq('id', id);
+                const { error } = await supabaseClient.from('proveedores').update({ nombre_empresa: empresa, contacto, telefono, especialidad }).eq('id', id);
+                resError = error;
             } else {
-                await supabaseClient.from('proveedores').insert([{ nombre_empresa: empresa, contacto, telefono, especialidad }]);
+                const { error } = await supabaseClient.from('proveedores').insert([{ nombre_empresa: empresa, contacto, telefono, especialidad }]);
+                resError = error;
             }
             
-            document.querySelector('#modalProveedor .btn-close').click();
-            cargarProveedoresAdmin();
+            if (!resError) {
+                document.querySelector('#modalProveedor .btn-close').click();
+                mostrarFeedback('exito', 'Proveedor Guardado', id ? 'Proveedor actualizado con éxito.' : 'Nuevo proveedor registrado.');
+                cargarProveedoresAdmin();
+            } else {
+                mostrarFeedback('error', 'Error al Guardar', resError.message);
+            }
         });
     }
 
     // ==========================================
-    // 9. ACTUALIZACIÓN DE ESTADO Y NOTA DE RESERVAS
+    // 9. ACTUALIZACIÓN DE NOTAS / ESTADO RESERVA
     // ==========================================
     const formNotaReserva = document.getElementById('formNotaReserva');
     if (formNotaReserva) {
@@ -479,16 +562,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const nota = document.getElementById('notaReservaInput').value;
             const estadoNuevo = document.getElementById('estadoReservaSelect').value;
 
-            const { error } = await supabaseClient
-                .from('reservas')
-                .update({ nota_admin: nota, estado: estadoNuevo })
-                .eq('id', idReserva);
+            const { error } = await supabaseClient.from('reservas').update({ nota_admin: nota, estado: estadoNuevo }).eq('id', idReserva);
             
             if (!error) {
                 document.querySelector('#modalNotaReserva .btn-close').click();
+                mostrarFeedback('exito', 'Solicitud Actualizada', 'Los cambios en la reserva fueron guardados.');
                 cargarReservasAdmin(); 
             } else {
-                alert('Error al actualizar la solicitud: ' + error.message);
+                mostrarFeedback('error', 'Error al Actualizar', error.message);
             }
         });
     }
@@ -522,21 +603,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!insertError) {
                     const { error: deleteError } = await supabaseClient.from(tablaOrigen).delete().eq('id', idUsuario);
                     if (deleteError) {
-                        alert('El usuario se copió al nuevo rol, pero no se pudo eliminar de la tabla anterior debido a registros vinculados (ej. reservas): ' + deleteError.message);
+                        mostrarFeedback('advertencia', 'Cambio Parcial', 'El perfil fue copiado al nuevo rol, pero no se eliminó de la tabla origen por dependencias existentes.');
+                    } else {
+                        mostrarFeedback('exito', 'Rol Actualizado', 'El usuario fue transferido correctamente.');
                     }
                     document.querySelector('#modalEditarRol .btn-close').click();
                     cargarUsuariosAdmin(); 
                 } else {
-                    alert('Error al transferir de tabla: ' + insertError.message);
+                    mostrarFeedback('error', 'Error de Traspaso', insertError.message);
                 }
             }
         });
     }
 }); 
 
-// ==========================================
+// ==========================================================================
 // FUNCIONES GLOBALES PARA EL DASHBOARD
-// ==========================================
+// ==========================================================================
 window.listaServiciosGlobal = [];
 window.listaReservasGlobal = [];
 window.listaAdminsGlobal = [];
@@ -610,11 +693,12 @@ window.abrirModalNota = function(idReserva) {
     }
 };
 
-window.eliminarReserva = async function(id) {
-    if (confirm('¿Deseas eliminar permanentemente esta solicitud de reserva?')) { 
+window.eliminarReserva = function(id) {
+    confirmarAccionModal('¿Eliminar Solicitud?', 'Se eliminará permanentemente este registro de reserva.', async () => {
         await supabaseClient.from('reservas').delete().eq('id', id); 
+        mostrarFeedback('exito', 'Registro Eliminado', 'La reserva fue retirada del panel.');
         cargarReservasAdmin(); 
-    }
+    });
 };
 
 async function cargarServiciosAdmin() {
@@ -657,27 +741,15 @@ async function cargarServiciosAdmin() {
     });
 }
 
-
 window.cambiarEstadoServicio = async function(id) {
-    const servicio = window.listaServiciosGlobal.find(
-        s => String(s.id) === String(id)
-    );
+    const servicio = window.listaServiciosGlobal.find(s => String(s.id) === String(id));
+    if (!servicio) return;
 
-    if (!servicio) {
-        console.error('Servicio no encontrado:', id);
-        return;
-    }
-
-    const boton = Array.from(
-        document.querySelectorAll('#tablaServiciosBody button')
-    ).find(b => b.getAttribute('onclick') === `cambiarEstadoServicio(${id})`);
-
+    const boton = Array.from(document.querySelectorAll('#tablaServiciosBody button'))
+        .find(b => b.getAttribute('onclick') === `cambiarEstadoServicio(${id})`);
     if (!boton || boton.disabled) return;
 
-    const nuevoEstado = servicio.estado === 'activo'
-        ? 'inactivo'
-        : 'activo';
-
+    const nuevoEstado = servicio.estado === 'activo' ? 'inactivo' : 'activo';
     boton.disabled = true;
 
     try {
@@ -691,11 +763,9 @@ window.cambiarEstadoServicio = async function(id) {
         if (error) throw error;
 
         servicio.estado = data.estado;
-
         const fila = boton.closest('tr');
         const badge = fila.querySelector('span.badge');
         const icono = boton.querySelector('i');
-
         const activo = data.estado === 'activo';
 
         badge.textContent = activo ? 'Activo' : 'Inactivo';
@@ -705,18 +775,10 @@ window.cambiarEstadoServicio = async function(id) {
         icono.classList.toggle('fa-eye-slash', activo);
         icono.classList.toggle('fa-eye', !activo);
 
-        const texto = activo
-            ? 'Suspender servicio'
-            : 'Reactivar servicio';
-
-        boton.title = texto;
-        boton.setAttribute('aria-label', texto);
-
-        console.log('Estado actualizado:', data.estado);
-
+        mostrarFeedback('exito', 'Estado Actualizado', `El servicio ahora está ${activo ? 'ACTIVO' : 'INACTIVO'}.`);
     } catch (error) {
-        console.error('Error al actualizar el servicio:', error);
-        alert('No se pudo actualizar el estado del servicio.');
+        console.error(error);
+        mostrarFeedback('error', 'Error al Actualizar', 'No se pudo cambiar el estado del servicio.');
     } finally {
         boton.disabled = false;
     }
@@ -742,11 +804,12 @@ window.limpiarModalServicio = function() {
     document.getElementById('tituloModalServicio').innerText = 'Nuevo Servicio';
 };
 
-window.eliminarServicio = async function(id) {
-    if (confirm('¿Estás seguro de eliminar este servicio?')) { 
+window.eliminarServicio = function(id) {
+    confirmarAccionModal('¿Eliminar Servicio?', 'El servicio seleccionado será eliminado del catálogo permanentemente.', async () => {
         await supabaseClient.from('servicios').delete().eq('id', id); 
+        mostrarFeedback('exito', 'Servicio Eliminado', 'El servicio ha sido eliminado del sistema.');
         cargarServiciosAdmin(); 
-    }
+    });
 };
 
 async function cargarExtrasAdmin() {
@@ -794,11 +857,12 @@ window.limpiarModalExtra = function() {
     document.getElementById('tituloModalExtra').innerText = 'Nuevo Extra';
 };
 
-window.eliminarExtra = async function(id) {
-    if (confirm('¿Eliminar este extra?')) { 
+window.eliminarExtra = function(id) {
+    confirmarAccionModal('¿Eliminar Extra?', 'Este adicional dejará de estar disponible para eventos.', async () => {
         await supabaseClient.from('extras').delete().eq('id', id); 
+        mostrarFeedback('exito', 'Extra Eliminado', 'El servicio extra ha sido retirado.');
         cargarExtrasAdmin(); 
-    }
+    });
 };
 
 async function cargarProveedoresAdmin() {
@@ -848,11 +912,12 @@ window.limpiarModalProveedor = function() {
     document.getElementById('tituloModalProveedor').innerText = 'Nuevo Proveedor';
 };
 
-window.eliminarProveedor = async function(id) {
-    if (confirm('¿Eliminar este proveedor?')) { 
+window.eliminarProveedor = function(id) {
+    confirmarAccionModal('¿Eliminar Proveedor?', 'El registro del proveedor y su contacto serán eliminados.', async () => {
         await supabaseClient.from('proveedores').delete().eq('id', id); 
+        mostrarFeedback('exito', 'Proveedor Eliminado', 'El proveedor fue retirado del sistema.');
         cargarProveedoresAdmin(); 
-    }
+    });
 };
 
 async function cargarUsuariosAdmin() {
@@ -869,17 +934,11 @@ async function cargarUsuariosAdmin() {
     tablaAdmin.innerHTML = '';
     tablaCliente.innerHTML = '';
 
-    if (window.listaAdminsGlobal.length === 0) {
-        tablaAdmin.innerHTML = '<tr><td colspan="4" class="text-center p-4">No hay administradores registrados.</td></tr>';
-    } else {
-        window.listaAdminsGlobal.forEach(per => renderUsuarioFila(per, tablaAdmin, 'admin'));
-    }
+    if (window.listaAdminsGlobal.length === 0) tablaAdmin.innerHTML = '<tr><td colspan="4" class="text-center p-4">No hay administradores registrados.</td></tr>';
+    else window.listaAdminsGlobal.forEach(per => renderUsuarioFila(per, tablaAdmin, 'admin'));
 
-    if (window.listaClientesGlobal.length === 0) {
-        tablaCliente.innerHTML = '<tr><td colspan="4" class="text-center p-4">No hay clientes registrados.</td></tr>';
-    } else {
-        window.listaClientesGlobal.forEach(per => renderUsuarioFila(per, tablaCliente, 'cliente'));
-    }
+    if (window.listaClientesGlobal.length === 0) tablaCliente.innerHTML = '<tr><td colspan="4" class="text-center p-4">No hay clientes registrados.</td></tr>';
+    else window.listaClientesGlobal.forEach(per => renderUsuarioFila(per, tablaCliente, 'cliente'));
 }
 
 function renderUsuarioFila(per, tablaBody, tipo) {
@@ -912,13 +971,17 @@ window.prepararEdicionRol = function(idUsuario, tipo) {
     }
 };
 
-window.eliminarUsuario = async function(id, tipo) {
-    if (confirm(`¿Estás seguro de que deseas eliminar permanentemente a este ${tipo}?`)) {
+window.eliminarUsuario = function(id, tipo) {
+    confirmarAccionModal(`¿Eliminar ${tipo.toUpperCase()}?`, `Esta acción retirará permanentemente al usuario del sistema.`, async () => {
         const tabla = tipo === 'admin' ? 'administradores' : 'clientes';
         const { error } = await supabaseClient.from(tabla).delete().eq('id', id);
-        if (!error) cargarUsuariosAdmin();
-        else alert('No se pudo eliminar el registro: ' + error.message);
-    }
+        if (!error) {
+            mostrarFeedback('exito', 'Usuario Eliminado', `El ${tipo} ha sido retirado.`);
+            cargarUsuariosAdmin();
+        } else {
+            mostrarFeedback('error', 'Error al Eliminar', error.message);
+        }
+    });
 };
 
 // ==========================================
@@ -937,8 +1000,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { 
-                alert('Debes iniciar sesión como cliente para poder dejar una reseña.'); 
-                window.location.href = 'login.html'; 
+                mostrarFeedback('advertencia', 'Acceso Requerido', 'Debes iniciar sesión como cliente para poder dejar una reseña.');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
                 return; 
             }
 
@@ -948,10 +1011,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .ilike('correo', session.user.email.trim().toLowerCase())
                 .maybeSingle();
 
-            if (!perfilData) return alert('Solo los clientes registrados pueden publicar reseñas.');
+            if (!perfilData) {
+                return mostrarFeedback('advertencia', 'Acceso Denegado', 'Solo los clientes registrados pueden publicar reseñas.');
+            }
 
             const calificacion = document.getElementById('calificacionInput').value;
-            const comentario = document.getElementById('comentarioResenaInput').value;
+            const comentario = document.getElementById('comentarioResenaInput').value.trim();
 
             const { error } = await supabaseClient.from('resenas').insert([{ 
                 cliente_id: perfilData.id, 
@@ -961,12 +1026,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }]);
 
             if (!error) {
-                alert('¡Gracias por tu reseña! Se ha publicado correctamente.');
+                mostrarFeedback('exito', '¡Gracias por tu Reseña!', 'Tu testimonio ha sido publicado satisfactoriamente.');
                 document.querySelector('#modalNuevaResena .btn-close').click();
                 formNuevaResena.reset();
                 cargarResenasPublicas(); 
             } else {
-                alert('Hubo un error al publicar la reseña: ' + error.message);
+                mostrarFeedback('error', 'Error al Publicar', error.message);
             }
         });
     }
