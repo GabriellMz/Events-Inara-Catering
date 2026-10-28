@@ -102,7 +102,7 @@
                                 <i class="fa-solid fa-phone icon-left"></i>
                                 <input type="text" id="regTelefono" class="form-control login-input" placeholder="9 números (Ej. 987654321)" maxlength="9" required>
                             </div>
-                            <div class="error-message" id="errorTelefono"><i class="fa-solid fa-circle-exclamation me-1"></i> El teléfono debe tener 9 números y sin letras.</div>
+                            <div class="error-message" id="errorTelefono"><i class="fa-solid fa-circle-exclamation me-1"></i> El teléfono debe comenzar con 9 y tener exactamente 9 dígitos.</div>
                         </div>
 
                         <div class="mb-4">
@@ -142,7 +142,10 @@
                         <div class="mb-4">
                             <div class="login-input-group">
                                 <i class="fa-regular fa-envelope icon-left"></i>
-                                <input type="email" id="emailRecuperacion" class="form-control login-input" placeholder="tu_correo@inara.com" required>
+                                <input type="email" id="emailRecuperacion" class="form-control login-input" placeholder="tu_correo@gmail.com" aria-describedby="errorEmailRecuperacion" required>
+<div id="errorEmailRecuperacion" class="small mt-2" style="color:#ff4d5a;display:none;" role="alert">
+    Ingresa un correo válido de Gmail, Hotmail, Outlook, Yahoo, Live o Inara.
+</div>
                             </div>
                         </div>
                         <button type="submit" class="btn-main w-100 py-3">ENVIAR ENLACE</button>
@@ -215,7 +218,7 @@
                 if (inputEmail.value === '') formValido = false;
 
                 // 4. Validar Teléfono (Exactamente 9 dígitos, solo números)
-                const regexTelefono = /^[0-9]{9}$/;
+                const regexTelefono = /^9[0-9]{8}$/;
                 if (inputTelefono.value.length > 0 && !regexTelefono.test(inputTelefono.value)) {
                     inputTelefono.classList.add('input-error');
                     document.getElementById('errorTelefono').style.display = 'block';
@@ -313,5 +316,55 @@
     <script src="./js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./js/supabase.js"></script>
+<script id="validacion-correo-recuperacion">
+document.addEventListener('DOMContentLoaded', () => {
+    const correo = document.getElementById('emailRecuperacion');
+    const error = document.getElementById('errorEmailRecuperacion');
+    const formulario = document.getElementById('formRecuperarPass');
+
+    if (!correo || !error || !formulario) return;
+
+    const dominiosValidos = [
+        'gmail.com',
+        'hotmail.com',
+        'outlook.com',
+        'yahoo.com',
+        'live.com',
+        'inara.com'
+    ];
+
+    function validarCorreo(mostrarVacio = false) {
+        const valor = correo.value.trim().toLowerCase();
+        const formatoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+        const dominio = valor.split('@')[1];
+
+        const valido = formatoValido && dominiosValidos.includes(dominio);
+        const mostrarError = !valido && (valor.length > 0 || mostrarVacio);
+
+        error.style.display = mostrarError ? 'block' : 'none';
+
+        correo.style.border = mostrarError
+            ? '1px solid #ff4d5a'
+            : '';
+
+        correo.setAttribute('aria-invalid', mostrarError ? 'true' : 'false');
+
+        correo.setCustomValidity(valido ? '' : 'Correo no admitido');
+
+        return valido;
+    }
+
+    correo.addEventListener('input', () => validarCorreo());
+    correo.addEventListener('blur', () => validarCorreo());
+
+    formulario.addEventListener('submit', (evento) => {
+        if (!validarCorreo(true)) {
+            evento.preventDefault();
+            evento.stopImmediatePropagation();
+            correo.focus();
+        }
+    }, true);
+});
+</script>
 </body>
 </html>
